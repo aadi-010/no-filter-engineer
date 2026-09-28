@@ -1,0 +1,1968 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NO FILTER ENGINEER — Aditya Kumar | Building Glowrova in Public</title>
+<meta name="description" content="Solo founder & B.Tech CS student from Gaya, now in Hyderabad, building Glowrova (AI salon booking platform for Tier-2 India) in public on YouTube.">
+
+<!-- Open Graph / Social Meta -->
+<meta property="og:title" content="NO FILTER ENGINEER — Shipping a startup with no filter">
+<meta property="og:description" content="Solo founder building Glowrova in public: an AI salon booking platform for Tier-2 India.">
+<meta property="og:type" content="website">
+
+<!-- Typography: Instrument Serif (400+italic), Manrope (400-700), JetBrains Mono (400/500/700) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   TUNABLE KNOBS: GIANT WORD & BLEND CONTROLS
+   --------------------------------------------------------------------------
+   The giant "No Filter" word sits behind Aditya using `mix-blend-mode: darken`.
+   The browser keeps the darker of the word and video at every pixel, so dark
+   hair and black shirt naturally cover the word without requiring alpha cutouts.
+
+   KNOWN RISK & TUNING GUIDE:
+   If lit skin (forehead, cheeks) is lighter than the word, the letters can ghost
+   through his face. Use these knobs to tune:
+   1. --ghost-mult (default 0.955): Multiplier applied to backdrop luminance.
+      If face ghosting appears, raise toward 0.98 (makes word barely darker than backdrop).
+   2. --word-top (default 6vh): Vertical positioning of the type.
+      If letters overlap forehead, lift higher (e.g. 2vh - 4vh) above the hairline.
+   3. --word-size (default clamp(80px, 16vw, 280px)): Font size clamp.
+      If overlap persists, shrink to ~12vw (e.g. clamp(70px, 12vw, 200px)).
+   ========================================================================== */
+:root {
+  /* Blend & positioning knobs */
+  --ghost-mult: 0.955;
+  --word-top: 6vh;
+  --word-size: clamp(80px, 16vw, 280px);
+
+  /* Color Tokens (Fallbacks derived from footage, dynamic --bg & --ghost sampled at runtime) */
+  --bg: #B98555;
+  --ghost: #B17F51;
+  --paper: #EFE3D2;
+  --ink: #1A120C;
+  --ink-2: #3A2A1E;
+  --ink-3: #6A5342;
+  --line: rgba(26, 18, 12, 0.14);
+  --gold: #F0B35A;
+  --teal: #0E7C86;
+  --panel: #1B130D;
+  --panel-2: #2A1E15;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--panel);
+  color: var(--paper);
+  font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  background-color: var(--panel);
+}
+
+/* Typography Classes */
+.font-serif {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ==========================================================================
+   CHOREOGRAPHY & REVEAL SYSTEM (.rv)
+   Nothing typographic moves until Aditya has settled at REVEAL_AT.
+   ========================================================================== */
+.rv {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
+  transition-delay: calc(var(--d, 0) * 90ms);
+  will-change: opacity, transform, filter;
+}
+
+.hero.is-revealed .rv {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   HERO SECTION (100svh, overflow hidden, dark-text-free)
+   ========================================================================== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--panel);
+  color: var(--paper);
+}
+
+/* Video: Absolutely positioned, object-fit: cover, object-position: 50% 20% */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* The Trick: Giant word BEHIND him using mix-blend-mode: darken */
+.giant-word {
+  position: absolute;
+  top: var(--word-top);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: var(--word-size);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--ghost);
+  mix-blend-mode: darken;
+  mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.35) 62%, transparent 86%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.35) 62%, transparent 86%);
+  user-select: none;
+}
+
+.giant-word em {
+  font-style: italic;
+}
+
+/* Legibility Overlay: Left, right and bottom gradients */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    /* Left-to-right gradient: 0.85 at 0% to transparent at 40% */
+    linear-gradient(90deg, rgba(21, 14, 9, 0.85) 0%, rgba(21, 14, 9, 0.6) 22%, transparent 40%),
+    /* Mirrored right gradient: 0.5 at 100% to transparent at 60% */
+    linear-gradient(270deg, rgba(21, 14, 9, 0.5) 0%, rgba(21, 14, 9, 0.25) 20%, transparent 40%),
+    /* Bottom gradient: 0.9 at bottom to transparent at 45% */
+    linear-gradient(0deg, rgba(21, 14, 9, 0.92) 0%, rgba(21, 14, 9, 0.72) 20%, transparent 45%);
+}
+
+/* Hero UI Layer: Flex column spanning 100svh */
+.hero-ui {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 44px 20px;
+  pointer-events: none; /* children enable pointer events */
+}
+
+.hero-ui * {
+  pointer-events: auto;
+}
+
+/* Navigation */
+.hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 48px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--paper);
+}
+
+.brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--teal) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.brand-mark-inner {
+  width: 8px;
+  height: 8px;
+  background: var(--panel);
+  border-radius: 2px;
+}
+
+.brand-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(239, 227, 210, 0.75);
+}
+
+.nav-center a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-center a:hover {
+  color: var(--gold);
+}
+
+.nav-center .dot {
+  opacity: 0.35;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-subscribe {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-decoration: none;
+  padding: 6px 4px;
+  transition: color 0.2s ease;
+}
+
+.nav-subscribe:hover {
+  color: var(--gold);
+}
+
+.nav-pill-work {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  transition: transform 0.2s var(--ease), background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.nav-pill-work:hover {
+  background: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Hero Main Section: Clear central 36% for Aditya */
+.hero-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+}
+
+/* Left Copy: max-width 400px, pushed ~76px down to clear the giant word */
+.hero-left {
+  max-width: 400px;
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(76px);
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.eyebrow-rule {
+  width: 28px;
+  height: 1px;
+  background: var(--gold);
+  display: inline-block;
+  opacity: 0.85;
+}
+
+.hero-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(44px, 4.8vw, 76px);
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+  margin-bottom: 20px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-lede {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(239, 227, 210, 0.85);
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-build-log {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid rgba(240, 179, 90, 0.25);
+  border-radius: 9999px;
+  padding: 8px 10px 8px 22px;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s var(--ease), border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-build-log:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.65);
+}
+
+.btn-arrow-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s var(--ease);
+}
+
+.btn-build-log:hover .btn-arrow-circle {
+  transform: translateX(2px);
+}
+
+.link-glowrova {
+  color: var(--paper);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(239, 227, 210, 0.45);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.link-glowrova:hover {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
+/* Center Spacer: keeps central 36% clear of any text */
+.hero-spacer {
+  width: 36%;
+  pointer-events: none;
+}
+
+/* Right Cluster: min(380px, 30vw) */
+.hero-right {
+  min-width: 320px;
+  max-width: 380px;
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Trust row: 4 overlapping gradient avatars with label */
+.trust-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-disc {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--panel);
+  margin-left: -8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.avatar-disc:first-child {
+  margin-left: 0;
+}
+
+.avatar-disc-1 { background: linear-gradient(135deg, #F0B35A, #B98555); }
+.avatar-disc-2 { background: linear-gradient(135deg, #0E7C86, #1A120C); }
+.avatar-disc-3 { background: linear-gradient(135deg, #EFE3D2, #6A5342); }
+.avatar-disc-4 { background: linear-gradient(135deg, #D4924B, #0E7C86); }
+
+.trust-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(239, 227, 210, 0.85);
+  letter-spacing: 0.05em;
+}
+
+/* Hero Cards Side by Side */
+.cards-row {
+  display: flex;
+  gap: 14px;
+}
+
+.hero-card {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.3s var(--ease), border-color 0.3s ease;
+}
+
+.hero-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(240, 179, 90, 0.3);
+}
+
+.hero-card--dropped {
+  transform: translateY(18px);
+}
+
+.hero-card--dropped:hover {
+  transform: translateY(16px);
+}
+
+.card-header {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(239, 227, 210, 0.6);
+}
+
+.card-thumb-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(240,179,90,0.2) 0%, rgba(14,124,134,0.3) 60%, rgba(27,19,13,0.95) 100%);
+}
+
+.card-thumb-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+.card-thumb-canvas.is-drawn {
+  opacity: 1;
+}
+
+.thumb-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  background: linear-gradient(180deg, transparent 40%, rgba(27,19,13,0.85) 90%);
+}
+
+.thumb-caption {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--paper);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.thumb-dots {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.thumb-dots .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(239, 227, 210, 0.3);
+}
+
+.thumb-dots .dot.gold {
+  background: var(--gold);
+}
+
+.card-stat {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--paper);
+  padding: 2px 0 4px;
+}
+
+/* Bottom Strip: Founder 01 Aditya, Location, Replay Pill */
+.hero-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 12px;
+}
+
+.strip-founder {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.strip-founder-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(239, 227, 210, 0.6);
+}
+
+.strip-founder-name {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--paper);
+}
+
+.strip-location {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(239, 227, 210, 0.7);
+}
+
+.replay-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  color: var(--paper);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease);
+}
+
+.replay-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.replay-pill svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* ==========================================================================
+   BELOW THE FOLD SECTION: "WHY NO FILTER"
+   Gradient from --bg to --paper over the first 220px with hairline on top.
+   ========================================================================== */
+.section-notes {
+  position: relative;
+  width: 100%;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--bg) 0px, var(--paper) 220px, var(--paper) 100%);
+  color: var(--ink);
+  padding: 100px 44px 120px;
+}
+
+.notes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Two-column Header */
+.notes-header {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+
+.notes-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notes-kicker .kicker-num {
+  color: var(--teal);
+}
+
+.notes-h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(40px, 5.2vw, 78px);
+  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.notes-intro-p {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+/* Bento Grid: 1.35fr 1fr 1fr, 16px gap */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* Common Note Card Styles */
+.note-card {
+  border-radius: 22px;
+  padding: 32px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.note-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+}
+
+.note-index {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.note-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 32px;
+  line-height: 1.05;
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+
+.note-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Note 1: Dark, spanning two rows */
+.note-card-dark {
+  grid-row: span 2;
+  background: var(--panel);
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 44px rgba(27, 19, 13, 0.25);
+}
+
+.note-card-dark .note-index {
+  color: var(--gold);
+}
+
+.note-card-dark .note-title {
+  color: var(--paper);
+}
+
+.note-card-dark .note-text {
+  color: rgba(239, 227, 210, 0.78);
+}
+
+.map-arc-box {
+  width: 100%;
+  margin-top: 28px;
+  position: relative;
+}
+
+.map-arc-svg {
+  width: 100%;
+  height: 200px;
+  overflow: visible;
+}
+
+.map-arc-path {
+  stroke: var(--gold);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 380;
+  stroke-dashoffset: 380;
+  transition: stroke-dashoffset 2s var(--ease);
+}
+
+.note-card.is-visible .map-arc-path {
+  stroke-dashoffset: 0;
+}
+
+.map-node {
+  fill: var(--gold);
+}
+
+.map-node-pulse {
+  fill: rgba(240, 179, 90, 0.25);
+  animation: pulse-ring 2.5s infinite cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+@keyframes pulse-ring {
+  0% { r: 6; opacity: 0.8; }
+  100% { r: 18; opacity: 0; }
+}
+
+.map-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  fill: var(--paper);
+}
+
+.map-sublabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  fill: rgba(239, 227, 210, 0.55);
+}
+
+/* Light Cards: rgba(255,255,255,.45), hairline border, 22px radius */
+.note-card-light {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 18, 12, 0.08);
+  box-shadow: 0 10px 30px rgba(26, 18, 12, 0.04);
+}
+
+.note-card-light .note-index {
+  color: var(--ink-3);
+}
+
+.note-card-light .note-title {
+  color: var(--ink);
+}
+
+.note-card-light .note-text {
+  color: var(--ink-2);
+}
+
+/* Swatch Chips */
+.swatch-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.swatch-chip {
+  background: rgba(26, 18, 12, 0.06);
+  border: 1px solid rgba(26, 18, 12, 0.1);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+/* Note 4: Spanning two columns */
+.note-card-span-2 {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.target-icon-box {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.target-icon-svg {
+  width: 88px;
+  height: 88px;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  fill: none;
+  transition: transform 0.6s var(--ease);
+}
+
+.note-card:hover .target-icon-svg {
+  transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   STATS BAND (Dark, 4 columns with faint dividers)
+   ========================================================================== */
+.stats-band {
+  background: var(--panel);
+  color: var(--paper);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 36px 40px;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  box-shadow: 0 24px 50px rgba(27, 19, 13, 0.35);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.stats-band.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.stat-col:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: -14px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(239, 227, 210, 0.6);
+}
+
+.stat-value {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--paper);
+}
+
+.stat-value em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* Ruler track for SHIPPED */
+.ruler-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.ruler-fill {
+  height: 100%;
+  width: 0;
+  background: var(--gold);
+  border-radius: 3px;
+  transition: width 1.4s var(--ease);
+}
+
+.stats-band.is-visible .ruler-fill {
+  width: 80%;
+}
+
+/* Team circles: solid circle beside a dashed one */
+.team-circles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.circle-solid {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.circle-dashed {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--gold);
+}
+
+/* Shimmer bar for FILTER "Zero" */
+.shimmer-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--teal) 0%, var(--gold) 50%, var(--teal) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+  margin-top: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Cadence curve for CADENCE "Every week" */
+.cadence-curve-svg {
+  width: 100%;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.cadence-path {
+  stroke: var(--gold);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  transition: stroke-dashoffset 1.4s var(--ease);
+}
+
+.stats-band.is-visible .cadence-path {
+  stroke-dashoffset: 0;
+}
+
+/* Closing Call to Action */
+.closing-block {
+  text-align: center;
+  margin-top: 72px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.closing-block.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.closing-tagline {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(34px, 4.4vw, 58px);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.btn-subscribe-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid rgba(26, 18, 12, 0.2);
+  border-radius: 9999px;
+  padding: 14px 34px;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 14px 28px rgba(26, 18, 12, 0.22);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-subscribe-cta:hover {
+  transform: translateY(-2px);
+  background: #000000;
+  box-shadow: 0 18px 36px rgba(26, 18, 12, 0.32);
+}
+
+.btn-subscribe-cta svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--gold);
+}
+
+.closing-cta-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+/* Contact Grid & Direct Links */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(26, 18, 12, 0.08);
+  border-radius: 18px;
+  padding: 22px 20px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.25s var(--ease), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(240, 179, 90, 0.5);
+  box-shadow: 0 14px 30px rgba(26, 18, 12, 0.08);
+}
+
+.contact-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.contact-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--teal);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.contact-card:hover .contact-icon {
+  transform: scale(1.1);
+  color: var(--gold);
+}
+
+.contact-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.contact-hint {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.note-channel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.note-channel-link:hover {
+  color: var(--ink);
+}
+
+.nav-social-icon {
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-social-icon:hover {
+  opacity: 1;
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (<= 900px)
+   --------------------------------------------------------------------------
+   - Hide nav links & SUBSCRIBE
+   - Giant word goes to 22vw
+   - Hero becomes a flex column with copy & cards flowing below the video
+     (46svh top padding, object-position 50% 20% so his face stays in view)
+   - Drop second card's offset
+   - Overlay becomes bottom-up dark gradient
+   - Notes go to one column, stats to 2x2
+   - No horizontal scroll, 16px side gutter throughout
+   ========================================================================== */
+@media (max-width: 900px) {
+  .hero {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 52svh;
+    object-position: 50% 20%;
+  }
+
+  .giant-word {
+    font-size: 22vw;
+    top: 3vh;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(0deg, rgba(21, 14, 9, 0.98) 0%, rgba(21, 14, 9, 0.8) 42%, rgba(21, 14, 9, 0.2) 80%, transparent 100%);
+  }
+
+  .hero-ui {
+    padding: 20px 16px 24px;
+  }
+
+  /* Nav adjustments */
+  .nav-center {
+    display: none;
+  }
+
+  .nav-subscribe {
+    display: none;
+  }
+
+  /* Hero Main Content flows vertically below the video area */
+  .hero-main {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 46svh;
+    gap: 36px;
+  }
+
+  .hero-spacer {
+    display: none;
+  }
+
+  .hero-left {
+    max-width: 100%;
+    width: 100%;
+    transform: none;
+  }
+
+  .hero-title {
+    font-size: clamp(38px, 9vw, 54px);
+  }
+
+  .hero-right {
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Drop second card's offset on mobile */
+  .hero-card--dropped {
+    transform: none;
+  }
+
+  .hero-card--dropped:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Bottom Strip */
+  .hero-strip {
+    margin-top: 40px;
+    flex-wrap: wrap;
+    gap: 14px;
+    height: auto;
+    padding-bottom: 8px;
+  }
+
+  /* Notes section on mobile */
+  .section-notes {
+    padding: 72px 16px 80px;
+  }
+
+  .notes-header {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .notes-h2 {
+    font-size: clamp(36px, 8.5vw, 52px);
+  }
+
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .note-card-dark {
+    grid-row: auto;
+  }
+
+  .note-card-span-2 {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Stats band goes to 2x2 grid */
+  .stats-band {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 28px 20px;
+  }
+
+  .stat-col:nth-child(2)::after {
+    display: none;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     HERO STAGE (100svh, dark-text-free, video holds on last frame facing camera)
+     ========================================================================== -->
+<header class="hero" id="hero">
+  <!-- Video Layer: 1280x720, 24fps, 8s, NO loop so final frame holds -->
+  <video id="hero-video" class="hero-video" src="hero.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+
+  <!-- The Trick: Giant display serif behind him using mix-blend-mode: darken -->
+  <div class="giant-word" id="giant-word" aria-hidden="true">
+    No <em>Filter</em>
+  </div>
+
+  <!-- Legibility Overlay: Left/right soft gradients + bottom gradient covering generator mark -->
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <!-- Hero UI Layer: Revealed after REVEAL_AT (7.4s) -->
+  <div class="hero-ui">
+    <!-- Top Nav -->
+    <nav class="hero-nav rv" style="--d: 1;">
+      <a href="#" class="nav-brand" aria-label="NO FILTER ENGINEER Home">
+        <div class="brand-mark" aria-hidden="true">
+          <div class="brand-mark-inner"></div>
+        </div>
+        <span class="brand-text">NO FILTER ENGINEER</span>
+      </a>
+
+      <div class="nav-center">
+        <a href="#build-log">BUILD LOG</a>
+        <span class="dot">·</span>
+        <a href="https://glowrova.in" target="_blank" rel="noopener noreferrer">GLOWROVA</a>
+        <span class="dot">·</span>
+        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer">VIDEOS</a>
+        <span class="dot">·</span>
+        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+        <span class="dot">·</span>
+        <a href="#contact">CONTACT</a>
+      </div>
+
+      <div class="nav-right">
+        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="nav-subscribe">SUBSCRIBE</a>
+        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on Instagram">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="mailto:iamaadi74@gmail.com" class="nav-pill-work">WORK WITH ME</a>
+      </div>
+    </nav>
+
+    <!-- Hero Main (Left copy + clear 36% center + Right cards) -->
+    <div class="hero-main">
+      <!-- Left Copy (clears giant word with translateY 76px) -->
+      <div class="hero-left">
+        <div class="hero-eyebrow rv" style="--d: 2;">
+          <span class="eyebrow-rule" aria-hidden="true"></span>
+          <span>BUILDING GLOWROVA IN PUBLIC</span>
+        </div>
+
+        <h1 class="hero-title rv" style="--d: 3;">
+          Shipping a startup with <em>no filter</em>
+        </h1>
+
+        <p class="hero-lede rv" style="--d: 4;">
+          B.Tech student from Gaya, now in Hyderabad, building an AI salon booking platform for Tier-2 India and documenting every week.
+        </p>
+
+        <div class="hero-cta-group rv" style="--d: 5;">
+          <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="btn-build-log">
+            <span>Watch the build log</span>
+            <span class="btn-arrow-circle" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="https://glowrova.in" target="_blank" rel="noopener noreferrer" class="link-glowrova">
+            See Glowrova ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Clear central 36% buffer for Aditya's face and shoulders -->
+      <div class="hero-spacer" aria-hidden="true"></div>
+
+      <!-- Right Cluster: min(380px, 30vw) -->
+      <div class="hero-right">
+        <!-- Trust Row -->
+        <div class="trust-row rv" style="--d: 6;">
+          <div class="avatar-stack" aria-hidden="true">
+            <div class="avatar-disc avatar-disc-1"></div>
+            <div class="avatar-disc avatar-disc-2"></div>
+            <div class="avatar-disc avatar-disc-3"></div>
+            <div class="avatar-disc avatar-disc-4"></div>
+          </div>
+          <span class="trust-label">[N]K watching the build</span>
+        </div>
+
+        <!-- Two Dark Cards side by side (second dropped 18px) -->
+        <div class="cards-row">
+          <!-- Card 1: GLOWROVA / 01 -->
+          <div class="hero-card rv" style="--d: 7;">
+            <div class="card-header">GLOWROVA / 01</div>
+            <div class="card-thumb-container">
+              <!-- Fractional crop: x=0.34, y=0.02, size=0.32 -->
+              <canvas class="card-thumb-canvas" width="240" height="240" data-crop="0.34,0.02,0.32" aria-hidden="true"></canvas>
+              <div class="thumb-overlay">
+                <span class="thumb-caption">The founder</span>
+                <div class="thumb-dots">
+                  <span class="dot gold"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+            <div class="card-stat">Solo</div>
+          </div>
+
+          <!-- Card 2: CHANNEL / 02 (dropped 18px) -->
+          <div class="hero-card hero-card--dropped rv" style="--d: 8;">
+            <div class="card-header">CHANNEL / 02</div>
+            <div class="card-thumb-container">
+              <!-- Fractional crop: x=0.40, y=0.14, size=0.18 -->
+              <canvas class="card-thumb-canvas" width="240" height="240" data-crop="0.40,0.14,0.18" aria-hidden="true"></canvas>
+              <div class="thumb-overlay">
+                <span class="thumb-caption">Eyes on the goal</span>
+                <div class="thumb-dots">
+                  <span class="dot gold"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+            <div class="card-stat">Tier-2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Strip -->
+    <div class="hero-strip rv" style="--d: 9;">
+      <div class="strip-founder">
+        <span class="strip-founder-mono">FOUNDER 01</span>
+        <span class="strip-founder-name">Aditya</span>
+      </div>
+
+      <div class="strip-location">
+        HYDERABAD · 17.38° N
+      </div>
+
+      <button type="button" id="replay-btn" class="replay-pill" aria-label="Replay founder intro video">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+        <span>Replay</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================================================
+     BELOW THE FOLD: "WHY NO FILTER" (Build notes, Bento grid, Stats band)
+     ========================================================================== -->
+<section class="section-notes" id="build-log">
+  <div class="notes-container">
+    <!-- Two-column header -->
+    <div class="notes-header">
+      <div>
+        <div class="notes-kicker">
+          <span class="kicker-num">02</span> BUILD NOTES: WHY NO FILTER
+        </div>
+        <h2 class="notes-h2">
+          Build it in the open, keep what's real, ship every week
+        </h2>
+      </div>
+      <div>
+        <p class="notes-intro-p">
+          Most tech narratives are told in retrospect: sanitized, cinematic, and scrubbed of doubt. Starting from Gaya, Bihar, with no industry pedigree, I chose to document the raw build in public. The broken migrations, the awkward user calls, the architecture pivots—everything stays on tape. Real leverage comes from radical honesty.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bento Grid (1.35fr 1fr 1fr, 16px gap) -->
+    <div class="bento-grid">
+      <!-- 1. Dark Card (spanning 2 rows): "From Gaya to Hyderabad" -->
+      <article class="note-card note-card-dark" id="note-card-gaya">
+        <div>
+          <div class="note-index">NOTE 01 · ORIGIN</div>
+          <h3 class="note-title">From Gaya to Hyderabad</h3>
+          <p class="note-text">
+            Tracing the trajectory from a small ancient city in Bihar to Hyderabad’s tech core. Moving hundreds of miles with a laptop and a single conviction: building scalable digital rails for Bharat's unorganized local markets.
+          </p>
+        </div>
+
+        <div class="map-arc-box">
+          <svg class="map-arc-svg" viewBox="0 0 340 180" aria-label="Journey from Gaya to Hyderabad">
+            <!-- Self-drawing curved arc -->
+            <path class="map-arc-path" d="M 60 40 Q 220 50 260 145" />
+
+            <!-- Gaya Marker -->
+            <circle class="map-node-pulse" cx="60" cy="40" r="8" />
+            <circle class="map-node" cx="60" cy="40" r="4.5" />
+            <text class="map-label" x="72" y="38">GAYA</text>
+            <text class="map-sublabel" x="72" y="50">BIHAR · ORIGIN</text>
+
+            <!-- Hyderabad Marker -->
+            <circle class="map-node-pulse" cx="260" cy="145" r="8" />
+            <circle class="map-node" cx="260" cy="145" r="4.5" />
+            <text class="map-label" x="180" y="145">HYDERABAD</text>
+            <text class="map-sublabel" x="180" y="157">TELANGANA · HQ</text>
+          </svg>
+        </div>
+      </article>
+
+      <!-- 2. Light Card: "Tier-2 first" with 3 swatch chips -->
+      <article class="note-card note-card-light">
+        <div>
+          <div class="note-index">NOTE 02 · DEMOGRAPHY</div>
+          <h3 class="note-title">Tier-2 first</h3>
+          <p class="note-text">
+            While metros suffer from hyper-saturated salon marketplaces, Tier-2 cities hold high-frequency salon demand with zero structured queueing infrastructure.
+          </p>
+        </div>
+        <div class="swatch-chips">
+          <span class="swatch-chip">[City 1]</span>
+          <span class="swatch-chip">[City 2]</span>
+          <span class="swatch-chip">[City 3]</span>
+        </div>
+      </article>
+
+      <!-- 3. Light Card: "AI that books the chair" -->
+      <article class="note-card note-card-light">
+        <div>
+          <div class="note-index">NOTE 03 · PRODUCT</div>
+          <h3 class="note-title">AI that books the chair</h3>
+          <p class="note-text">
+            Glowrova gives every neighbourhood salon an autonomous booking agent that turns casual WhatsApp voice notes into confirmed chair reservations—eliminating walk-in queue fatigue.
+          </p>
+        </div>
+      </article>
+
+      <!-- 4. Light Card (spanning 2 columns): "Building in public" with SVG eye/target -->
+      <article class="note-card note-card-light note-card-span-2">
+        <div>
+          <div class="note-index">NOTE 04 · METHOD</div>
+          <h3 class="note-title">Building in public</h3>
+          <p class="note-text">
+            Every technical sprint, architectural decision, and live customer interview recorded and shared on YouTube. No corporate filters, no PR spin—just pure engineering and iteration.
+          </p>
+          <div style="margin-top: 14px;">
+            <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="note-channel-link">
+              <span>Watch on YouTube @NoFilterEngineer ↗</span>
+            </a>
+          </div>
+        </div>
+        <div class="target-icon-box" aria-hidden="true">
+          <svg class="target-icon-svg" viewBox="0 0 100 100">
+            <!-- Concentric rings -->
+            <circle cx="50" cy="50" r="42" stroke-dasharray="3 3"/>
+            <circle cx="50" cy="50" r="28" stroke="var(--gold)"/>
+            <circle cx="50" cy="50" r="14"/>
+            <circle cx="50" cy="50" r="4" fill="var(--ink)"/>
+            <!-- Crosshairs -->
+            <line x1="50" y1="2" x2="50" y2="20"/>
+            <line x1="50" y1="80" x2="50" y2="98"/>
+            <line x1="2" y1="50" x2="20" y2="50"/>
+            <line x1="80" y1="50" x2="98" y2="50"/>
+          </svg>
+        </div>
+      </article>
+    </div>
+
+    <!-- Stats Band (4 columns with faint dividers) -->
+    <div class="stats-band" id="stats-band">
+      <!-- 1. SHIPPED [N] features with ruler -->
+      <div class="stat-col">
+        <span class="stat-label">SHIPPED</span>
+        <div class="stat-value">[N] <em>features</em></div>
+        <div class="ruler-track" title="80% sprint completion">
+          <div class="ruler-fill" id="ruler-bar"></div>
+        </div>
+      </div>
+
+      <!-- 2. TEAM "One" with solid circle beside dashed circle -->
+      <div class="stat-col">
+        <span class="stat-label">TEAM</span>
+        <div class="stat-value">One</div>
+        <div class="team-circles">
+          <span class="circle-solid" title="Founder"></span>
+          <span class="circle-dashed" title="Community & AI"></span>
+        </div>
+      </div>
+
+      <!-- 3. FILTER "Zero" with shimmering teal-to-gold bar -->
+      <div class="stat-col">
+        <span class="stat-label">FILTER</span>
+        <div class="stat-value">Zero</div>
+        <div class="shimmer-bar"></div>
+      </div>
+
+      <!-- 4. CADENCE "Every week" with self-drawing curve -->
+      <div class="stat-col">
+        <span class="stat-label">CADENCE</span>
+        <div class="stat-value"><em>Every week</em></div>
+        <svg class="cadence-curve-svg" viewBox="0 0 140 20" aria-hidden="true">
+          <path class="cadence-path" d="M 0 14 Q 35 2 70 12 T 140 6" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Closing Call to Action & Direct Contacts -->
+    <div class="closing-block" id="contact">
+      <h3 class="closing-tagline">
+        Follow the build, the wins and the bugs.
+      </h3>
+      <div class="closing-cta-row">
+        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="btn-subscribe-cta">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Subscribe to @NoFilterEngineer</span>
+        </a>
+      </div>
+
+      <!-- Direct Contact & Social Channels Grid -->
+      <div class="contact-grid">
+        <!-- 1. Direct Email -->
+        <a href="mailto:iamaadi74@gmail.com" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">DIRECT EMAIL</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <div class="contact-val">iamaadi74@gmail.com</div>
+          <div class="contact-hint">Say hello or pitch an idea ↗</div>
+        </a>
+
+        <!-- 2. Phone / WhatsApp -->
+        <a href="tel:+917258889394" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">DIRECT LINE / WHATSAPP</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <div class="contact-val">+91 7258889394</div>
+          <div class="contact-hint">Direct call or message ↗</div>
+        </a>
+
+        <!-- 3. Instagram -->
+        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">INSTAGRAM</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </div>
+          <div class="contact-val">@nofilterengineer</div>
+          <div class="contact-hint">Stories & behind-the-scenes ↗</div>
+        </a>
+
+        <!-- 4. YouTube -->
+        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">YOUTUBE CHANNEL</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <div class="contact-val">@NoFilterEngineer</div>
+          <div class="contact-hint">Weekly video build log ↗</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     INLINE SCRIPT: RUNTIME SAMPLING, CHOREOGRAPHY & INTERSECTION OBSERVERS
+     ========================================================================== -->
+<script>
+(function() {
+  'use strict';
+
+  /* ==========================================================================
+     TUNABLES
+     - REVEAL_AT: Seconds into hero.mp4 when Aditya settles facing camera (7.4s).
+       If your clip settles at a different moment, change this constant.
+     - SAMPLE: [width_ratio, height_ratio] backdrop area left of head.
+     - GHOST_MULT: Default 0.955. Raise to ~0.98 if forehead skin ghosting appears.
+     ========================================================================== */
+  const REVEAL_AT = 7.4;
+  const SAMPLE = [0.30, 0.20];
+  const GHOST_MULT = 0.955;
+
+  const hero = document.getElementById('hero');
+  const video = document.getElementById('hero-video');
+  const replayBtn = document.getElementById('replay-btn');
+
+  let isRevealed = false;
+  let hasSampledColor = false;
+
+  /* --------------------------------------------------------------------------
+     1. MATCH PAGE TO FOOTAGE AT RUNTIME
+     Draw 1px patch from video at SAMPLE coordinates into 1x1 canvas.
+     Read pixel, write to --bg, and set --ghost to color * --ghost-mult.
+     Wrap in try/catch to fall back gracefully on file:// or cross-origin.
+     -------------------------------------------------------------------------- */
+  function sampleFootageColor() {
+    if (hasSampledColor || !video) return;
+    try {
+      if (video.videoWidth === 0 || video.videoHeight === 0) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+
+      const sx = Math.floor(SAMPLE[0] * video.videoWidth);
+      const sy = Math.floor(SAMPLE[1] * video.videoHeight);
+
+      ctx.drawImage(video, sx, sy, 1, 1, 0, 0, 1, 1);
+      const px = ctx.getImageData(0, 0, 1, 1).data;
+
+      // Ignore if completely pitch black / not rendered yet
+      if (px[0] === 0 && px[1] === 0 && px[2] === 0) return;
+
+      const r = px[0];
+      const g = px[1];
+      const b = px[2];
+
+      const mult = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ghost-mult')) || GHOST_MULT;
+      const gr = Math.max(0, Math.min(255, Math.round(r * mult)));
+      const gg = Math.max(0, Math.min(255, Math.round(g * mult)));
+      const gb = Math.max(0, Math.min(255, Math.round(b * mult)));
+
+      const hexBg = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+      const hexGhost = '#' + [gr, gg, gb].map(x => x.toString(16).padStart(2, '0')).join('');
+
+      document.documentElement.style.setProperty('--bg', hexBg);
+      document.documentElement.style.setProperty('--ghost', hexGhost);
+      hasSampledColor = true;
+    } catch (err) {
+      console.warn('Runtime video sampling unavailable, falling back to CSS tokens:', err);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     2. DRAW CARD THUMBNAIL CROPS FROM FINAL FRAME
+     Each canvas has data-crop="x,y,size" with size as fraction of video width.
+     -------------------------------------------------------------------------- */
+  function renderCardThumbnails() {
+    if (!video) return;
+    const canvases = document.querySelectorAll('.card-thumb-canvas');
+    canvases.forEach(canvas => {
+      try {
+        const cropAttr = canvas.getAttribute('data-crop');
+        if (!cropAttr) return;
+        const [fx, fy, fsize] = cropAttr.split(',').map(Number);
+
+        const vw = video.videoWidth || 1280;
+        const vh = video.videoHeight || 720;
+
+        const sx = fx * vw;
+        const sy = fy * vh;
+        const sWidth = fsize * vw;
+        const sHeight = fsize * vw; // square aspect ratio crop
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+        canvas.classList.add('is-drawn');
+      } catch (err) {
+        console.warn('Card thumbnail crop error:', err);
+      }
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     3. HERO REVEAL CHOREOGRAPHY
+     Add .is-revealed once currentTime >= REVEAL_AT.
+     Never leave hero blank: reveal on ended, error, rejected play, or 9s timeout.
+     -------------------------------------------------------------------------- */
+  function revealHeroUI() {
+    if (isRevealed) return;
+    isRevealed = true;
+    if (hero) hero.classList.add('is-revealed');
+    sampleFootageColor();
+    renderCardThumbnails();
+  }
+
+  // Check prefers-reduced-motion: jump to last frame & reveal immediately with no delay
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    if (video) {
+      video.currentTime = 7.9;
+    }
+    revealHeroUI();
+  } else {
+    // Hard fallback timeout: 9s ensures hero UI is NEVER left blank
+    const fallbackTimer = setTimeout(() => {
+      revealHeroUI();
+    }, 9000);
+
+    if (video) {
+      video.addEventListener('loadeddata', () => {
+        sampleFootageColor();
+      });
+
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime >= REVEAL_AT) {
+          revealHeroUI();
+        }
+      });
+
+      video.addEventListener('ended', () => {
+        clearTimeout(fallbackTimer);
+        revealHeroUI();
+      });
+
+      video.addEventListener('error', () => {
+        clearTimeout(fallbackTimer);
+        revealHeroUI();
+      });
+
+      // Start playing video immediately if ready
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay blocked by browser policy: reveal gracefully
+          revealHeroUI();
+        });
+      }
+
+      if (video.readyState >= 2) {
+        sampleFootageColor();
+        if (video.currentTime >= REVEAL_AT) {
+          revealHeroUI();
+        }
+      }
+    } else {
+      revealHeroUI();
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     4. REPLAY BUTTON INTERACTION
+     Resets .is-revealed, hides thumbnails, and restarts video from 0s.
+     -------------------------------------------------------------------------- */
+  if (replayBtn && video) {
+    replayBtn.addEventListener('click', () => {
+      isRevealed = false;
+      if (hero) hero.classList.remove('is-revealed');
+
+      // Hide canvas thumbnails until settled again
+      document.querySelectorAll('.card-thumb-canvas').forEach(c => {
+        c.classList.remove('is-drawn');
+      });
+
+      video.currentTime = 0;
+      video.play().catch(err => console.warn('Replay play error:', err));
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     5. INTERSECTION OBSERVER FOR BELOW-THE-FOLD NOTES & STATS
+     Threshold: 0.18, fading up 28px with staggered reveals.
+     -------------------------------------------------------------------------- */
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.note-card, .stats-band, .closing-block').forEach(el => {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback if IntersectionObserver not supported
+    document.querySelectorAll('.note-card, .stats-band, .closing-block').forEach(el => {
+      el.classList.add('is-visible');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
