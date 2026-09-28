@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="assets/three.min.js" defer></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aditya Kumar — Computer Science Student · Founder &amp; Product Builder at Glowrova</title>
@@ -2051,9 +2052,96 @@ body {
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   SUBTLE 3D CARD TILT & AMBIENT CANVAS SYSTEM
+   ========================================================================== */
+.three-bg-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.45;
+  transition: opacity 1.2s ease;
+}
+
+#three-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+}
+
+.tilt-depth-lg {
+  transform: translateZ(16px);
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+.tilt-depth-md {
+  transform: translateZ(9px);
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+.tilt-depth-sm {
+  transform: translateZ(5px);
+  transform-style: preserve-3d;
+}
+
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 260px at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.14),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: overlay;
+  z-index: 10;
+}
+
+.tilt-card:hover .tilt-glare {
+  opacity: 1;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .three-bg-wrap {
+    display: none !important;
+  }
+  .tilt-card {
+    transform: none !important;
+  }
+  .tilt-depth-lg,
+  .tilt-depth-md,
+  .tilt-depth-sm {
+    transform: none !important;
+  }
+  .tilt-glare {
+    display: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
+<!-- 3D Ambient WebGL Background Canvas -->
+<div id="three-bg-wrap" class="three-bg-wrap" aria-hidden="true">
+  <canvas id="three-canvas"></canvas>
+</div>
 
 <!-- ==========================================================================
      HERO STAGE (100svh, dynamic blend with hero.mp4)
@@ -2933,6 +3021,283 @@ body {
       el.classList.add('is-visible');
     });
   }
+
+  /* ==========================================================================
+     6. SUBTLE 3D CARD TILT & DEPTH SYSTEM
+     ========================================================================== */
+  (function initCardTilt() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    const tiltCards = document.querySelectorAll(
+      '.contribution-card, .recognition-box, .other-work-card, .opportunity-card, .contact-card, .hero-card'
+    );
+
+    const MAX_TILT = 5.2; // Restrained 5.2 degrees max for subtle depth without distortion
+
+    tiltCards.forEach(card => {
+      card.classList.add('tilt-card');
+
+      // Append subtle specular glare overlay if not present
+      if (!card.querySelector('.tilt-glare')) {
+        const glare = document.createElement('div');
+        glare.className = 'tilt-glare';
+        glare.setAttribute('aria-hidden', 'true');
+        card.appendChild(glare);
+      }
+
+      // Add depth classes to inner visual elements for layered 3D parallax
+      const iconWrap = card.querySelector(
+        '.contribution-icon-wrap, .recognition-star-circle, .other-work-icon, .opp-icon-wrap, .contact-card-top, .card-thumb-container'
+      );
+      if (iconWrap && !iconWrap.classList.contains('tilt-depth-lg')) {
+        iconWrap.classList.add('tilt-depth-lg');
+      }
+
+      const title = card.querySelector(
+        '.contribution-title, .recognition-h2, .other-work-title, .opp-title, .contact-val, .card-header'
+      );
+      if (title && !title.classList.contains('tilt-depth-md')) {
+        title.classList.add('tilt-depth-md');
+      }
+
+      let rafId = null;
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const rotX = -y * MAX_TILT;
+        const rotY = x * MAX_TILT;
+
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          card.style.transition = 'transform 0.08s ease-out';
+          card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
+          card.style.setProperty('--glare-x', `${((x + 0.5) * 100).toFixed(1)}%`);
+          card.style.setProperty('--glare-y', `${((y + 0.5) * 100).toFixed(1)}%`);
+        });
+      }, { passive: true });
+
+      card.addEventListener('mouseleave', () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        card.style.transition = 'transform 0.5s var(--ease)';
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+        card.style.removeProperty('--glare-x');
+        card.style.removeProperty('--glare-y');
+      });
+    });
+  })();
+
+  /* ==========================================================================
+     7. LIGHTWEIGHT THREE.JS AMBIENT 3D BACKGROUND
+     - Subtle geometric node field using existing warm palette
+     - Reacts gently to mouse position and scroll velocity
+     - Auto-throttles on mobile, pauses when tab is hidden
+     ========================================================================== */
+  (function initThreeAmbient() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    function startScene() {
+      if (typeof THREE === 'undefined') {
+        setTimeout(startScene, 80);
+        return;
+      }
+
+      const canvas = document.getElementById('three-canvas');
+      if (!canvas) return;
+
+      const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+      const particleCount = isMobile ? 30 : 75;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 52;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: false,
+        powerPreference: 'low-power'
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 1.5));
+
+      // Circular particle texture
+      const c = document.createElement('canvas');
+      c.width = 32;
+      c.height = 32;
+      const ctx = c.getContext('2d');
+      const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.4, 'rgba(255, 255, 255, 0.7)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 32, 32);
+      const texture = new THREE.CanvasTexture(c);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Node Geometry with existing site colors:
+      // Paper cream: 0xEFE3D2, Gold: 0xF0B35A
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      const velocities = [];
+
+      const colPaper = new THREE.Color(0xEFE3D2);
+      const colGold = new THREE.Color(0xF0B35A);
+
+      const spreadX = 75;
+      const spreadY = 55;
+      const spreadZ = 35;
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * spreadX;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * spreadY;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * spreadZ;
+
+        velocities.push({
+          x: (Math.random() - 0.5) * 0.012,
+          y: (Math.random() - 0.5) * 0.012,
+          z: (Math.random() - 0.5) * 0.008
+        });
+
+        const isGold = Math.random() > 0.65;
+        const color = isGold ? colGold : colPaper;
+        colors[i * 3] = color.r;
+        colors[i * 3 + 1] = color.g;
+        colors[i * 3 + 2] = color.b;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: isMobile ? 1.7 : 2.3,
+        map: texture,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.42,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const points = new THREE.Points(geometry, material);
+      group.add(points);
+
+      // Connecting geometric lines
+      const maxLineConnections = isMobile ? 25 : 80;
+      const linePositions = new Float32Array(maxLineConnections * 2 * 3);
+      const lineGeometry = new THREE.BufferGeometry();
+      lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xEFE3D2,
+        transparent: true,
+        opacity: 0.09,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+      group.add(lines);
+
+      // Pointer & Scroll interactivity
+      let targetRotX = 0;
+      let targetRotY = 0;
+      let targetScrollY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        targetRotY = mouseX * 0.14; // gentle ~8 deg max
+        targetRotX = -mouseY * 0.09;
+      }, { passive: true });
+
+      window.addEventListener('scroll', () => {
+        targetScrollY = window.scrollY * 0.012;
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }, { passive: true });
+
+      // Tab visibility pause
+      let isVisible = true;
+      document.addEventListener('visibilitychange', () => {
+        isVisible = !document.hidden;
+        if (isVisible) requestAnimationFrame(animate);
+      });
+
+      function animate() {
+        if (!isVisible) return;
+        requestAnimationFrame(animate);
+
+        // Gentle drift & smooth pointer lerp
+        group.rotation.y += 0.0003;
+        group.rotation.y += (targetRotY - group.rotation.y) * 0.03;
+        group.rotation.x += (targetRotX - group.rotation.x) * 0.03;
+
+        camera.position.y += (-targetScrollY - camera.position.y) * 0.04;
+
+        // Position updates
+        const pos = geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          pos[i * 3] += velocities[i].x;
+          pos[i * 3 + 1] += velocities[i].y;
+          pos[i * 3 + 2] += velocities[i].z;
+
+          if (pos[i * 3] > spreadX / 2) pos[i * 3] = -spreadX / 2;
+          else if (pos[i * 3] < -spreadX / 2) pos[i * 3] = spreadX / 2;
+
+          if (pos[i * 3 + 1] > spreadY / 2) pos[i * 3] = -spreadY / 2;
+          else if (pos[i * 3 + 1] < -spreadY / 2) pos[i * 3] = spreadY / 2;
+        }
+        geometry.attributes.position.needsUpdate = true;
+
+        // Lines updates
+        if (!isMobile) {
+          let lineIdx = 0;
+          const connectDist = 13.0;
+          for (let i = 0; i < particleCount && lineIdx < maxLineConnections; i++) {
+            for (let j = i + 1; j < particleCount && lineIdx < maxLineConnections; j++) {
+              const dx = pos[i * 3] - pos[j * 3];
+              const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+              const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+              const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+              if (dist < connectDist) {
+                linePositions[lineIdx * 6] = pos[i * 3];
+                linePositions[lineIdx * 6 + 1] = pos[i * 3 + 1];
+                linePositions[lineIdx * 6 + 2] = pos[i * 3 + 2];
+                linePositions[lineIdx * 6 + 3] = pos[j * 3];
+                linePositions[lineIdx * 6 + 4] = pos[j * 3 + 1];
+                linePositions[lineIdx * 6 + 5] = pos[j * 3 + 2];
+                lineIdx++;
+              }
+            }
+          }
+          lineGeometry.setDrawRange(0, lineIdx * 2);
+          lineGeometry.attributes.position.needsUpdate = true;
+        }
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startScene);
+    } else {
+      startScene();
+    }
+  })();
+
 })();
 </script>
 
