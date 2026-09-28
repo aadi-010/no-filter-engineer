@@ -1135,8 +1135,8 @@ body {
 /* Contact Grid & Direct Links */
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
   max-width: 1100px;
   margin: 0 auto;
   text-align: left;
@@ -1223,6 +1223,12 @@ body {
 
 .note-channel-link:hover {
   color: var(--ink);
+}
+
+.nav-socials {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .nav-social-icon {
@@ -1378,6 +1384,13 @@ body {
   }
 
   .contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-grid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
@@ -1419,16 +1432,26 @@ body {
         <span class="dot">·</span>
         <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer">VIDEOS</a>
         <span class="dot">·</span>
-        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+        <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer">GITHUB</a>
+        <span class="dot">·</span>
+        <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
         <span class="dot">·</span>
         <a href="#contact">CONTACT</a>
       </div>
 
       <div class="nav-right">
         <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="nav-subscribe">SUBSCRIBE</a>
-        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on Instagram">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        </a>
+        <div class="nav-socials">
+          <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+        </div>
         <a href="mailto:iamaadi74@gmail.com" class="nav-pill-work">WORK WITH ME</a>
       </div>
     </nav>
@@ -1723,17 +1746,27 @@ body {
           <div class="contact-hint">Direct call or message ↗</div>
         </a>
 
-        <!-- 3. Instagram -->
-        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="contact-card">
+        <!-- 3. LinkedIn -->
+        <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer" class="contact-card">
           <div class="contact-card-top">
-            <span class="contact-badge">INSTAGRAM</span>
-            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <span class="contact-badge">LINKEDIN</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
           </div>
-          <div class="contact-val">@nofilterengineer</div>
-          <div class="contact-hint">Stories & behind-the-scenes ↗</div>
+          <div class="contact-val">Aditya Kumar</div>
+          <div class="contact-hint">Professional network & updates ↗</div>
         </a>
 
-        <!-- 4. YouTube -->
+        <!-- 4. GitHub -->
+        <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">GITHUB</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </div>
+          <div class="contact-val">github.com/aadi-010</div>
+          <div class="contact-hint">Code repos & open source ↗</div>
+        </a>
+
+        <!-- 5. YouTube -->
         <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="contact-card">
           <div class="contact-card-top">
             <span class="contact-badge">YOUTUBE CHANNEL</span>
@@ -1741,6 +1774,16 @@ body {
           </div>
           <div class="contact-val">@NoFilterEngineer</div>
           <div class="contact-hint">Weekly video build log ↗</div>
+        </a>
+
+        <!-- 6. Instagram -->
+        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-card-top">
+            <span class="contact-badge">INSTAGRAM</span>
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </div>
+          <div class="contact-val">@nofilterengineer</div>
+          <div class="contact-hint">Stories & behind-the-scenes ↗</div>
         </a>
       </div>
     </div>

@@ -11,6 +11,8 @@ Solo founder & B.Tech CS student from Gaya, now based in Hyderabad, building **G
 - Vanilla JavaScript
 
 ## 🌐 Connect & Links
+- **GitHub**: [github.com/aadi-010](https://github.com/aadi-010)
+- **LinkedIn**: [Aditya Kumar](https://www.linkedin.com/in/aditya-kumar-942617346/)
 - **YouTube**: [No Filter Engineer](https://www.youtube.com/@NoFilterEngineer)
 - **Instagram**: [@nofilterengineer](https://www.instagram.com/nofilterengineer/)
 - **Glowrova Platform**: [glowrova.in](https://glowrova.in/)
