@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NO FILTER ENGINEER — Aditya Kumar | Building Glowrova in Public</title>
-<meta name="description" content="Solo founder & B.Tech CS student from Gaya, now in Hyderabad, building Glowrova (AI salon booking platform for Tier-2 India) in public on YouTube.">
+<title>Aditya Kumar — Computer Science Student · Founder &amp; Product Builder at Glowrova</title>
+<meta name="description" content="Portfolio of Aditya Kumar: First-year Computer Science student, founder of Glowrova (AI salon booking platform for Tier-2 India), graphic designer, public speaker, and creator of No Filter Engineer.">
 
 <!-- Open Graph / Social Meta -->
-<meta property="og:title" content="NO FILTER ENGINEER — Shipping a startup with no filter">
-<meta property="og:description" content="Solo founder building Glowrova in public: an AI salon booking platform for Tier-2 India.">
+<meta property="og:title" content="Aditya Kumar — Computer Science Student · Founder &amp; Product Builder at Glowrova">
+<meta property="og:description" content="First-year CS student building Glowrova in public, crafting graphic design, and documenting the founder journey with no filter.">
 <meta property="og:type" content="website">
 
 <!-- Typography: Instrument Serif (400+italic), Manrope (400-700), JetBrains Mono (400/500/700) -->
@@ -19,28 +19,13 @@
 <style>
 /* ==========================================================================
    TUNABLE KNOBS: GIANT WORD & BLEND CONTROLS
-   --------------------------------------------------------------------------
-   The giant "No Filter" word sits behind Aditya using `mix-blend-mode: darken`.
-   The browser keeps the darker of the word and video at every pixel, so dark
-   hair and black shirt naturally cover the word without requiring alpha cutouts.
-
-   KNOWN RISK & TUNING GUIDE:
-   If lit skin (forehead, cheeks) is lighter than the word, the letters can ghost
-   through his face. Use these knobs to tune:
-   1. --ghost-mult (default 0.955): Multiplier applied to backdrop luminance.
-      If face ghosting appears, raise toward 0.98 (makes word barely darker than backdrop).
-   2. --word-top (default 6vh): Vertical positioning of the type.
-      If letters overlap forehead, lift higher (e.g. 2vh - 4vh) above the hairline.
-   3. --word-size (default clamp(80px, 16vw, 280px)): Font size clamp.
-      If overlap persists, shrink to ~12vw (e.g. clamp(70px, 12vw, 200px)).
    ========================================================================== */
 :root {
-  /* Blend & positioning knobs */
   --ghost-mult: 0.955;
   --word-top: 6vh;
   --word-size: clamp(80px, 16vw, 280px);
 
-  /* Color Tokens (Fallbacks derived from footage, dynamic --bg & --ghost sampled at runtime) */
+  /* Color Tokens */
   --bg: #B98555;
   --ghost: #B17F51;
   --paper: #EFE3D2;
@@ -90,7 +75,6 @@ body {
 
 /* ==========================================================================
    CHOREOGRAPHY & REVEAL SYSTEM (.rv)
-   Nothing typographic moves until Aditya has settled at REVEAL_AT.
    ========================================================================== */
 .rv {
   opacity: 0;
@@ -120,7 +104,7 @@ body {
 }
 
 /* ==========================================================================
-   HERO SECTION (100svh, overflow hidden, dark-text-free)
+   HERO STAGE (100svh, overflow hidden)
    ========================================================================== */
 .hero {
   position: relative;
@@ -132,7 +116,6 @@ body {
   color: var(--paper);
 }
 
-/* Video: Absolutely positioned, object-fit: cover, object-position: 50% 20% */
 .hero-video {
   position: absolute;
   inset: 0;
@@ -144,66 +127,54 @@ body {
   pointer-events: none;
 }
 
-/* The Trick: Giant word BEHIND him using mix-blend-mode: darken */
 .giant-word {
   position: absolute;
   top: var(--word-top);
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  z-index: 1;
-  pointer-events: none;
   text-align: center;
-  white-space: nowrap;
   font-family: 'Instrument Serif', Georgia, serif;
   font-size: var(--word-size);
-  font-weight: 400;
-  line-height: 0.92;
-  letter-spacing: -0.02em;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
   color: var(--ghost);
   mix-blend-mode: darken;
-  mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.35) 62%, transparent 86%);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.35) 62%, transparent 86%);
+  pointer-events: none;
   user-select: none;
+  z-index: 1;
+  white-space: nowrap;
 }
 
 .giant-word em {
   font-style: italic;
+  font-family: 'Instrument Serif', Georgia, serif;
 }
 
-/* Legibility Overlay: Left, right and bottom gradients */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
   pointer-events: none;
+  z-index: 2;
   background:
-    /* Left-to-right gradient: 0.85 at 0% to transparent at 40% */
-    linear-gradient(90deg, rgba(21, 14, 9, 0.85) 0%, rgba(21, 14, 9, 0.6) 22%, transparent 40%),
-    /* Mirrored right gradient: 0.5 at 100% to transparent at 60% */
-    linear-gradient(270deg, rgba(21, 14, 9, 0.5) 0%, rgba(21, 14, 9, 0.25) 20%, transparent 40%),
-    /* Bottom gradient: 0.9 at bottom to transparent at 45% */
-    linear-gradient(0deg, rgba(21, 14, 9, 0.92) 0%, rgba(21, 14, 9, 0.72) 20%, transparent 45%);
+    linear-gradient(90deg, rgba(27, 19, 13, 0.75) 0%, rgba(27, 19, 13, 0.35) 28%, transparent 48%, transparent 58%, rgba(27, 19, 13, 0.4) 75%, rgba(27, 19, 13, 0.8) 100%),
+    linear-gradient(180deg, rgba(27, 19, 13, 0.65) 0%, transparent 22%, transparent 70%, rgba(27, 19, 13, 0.92) 100%);
 }
 
-/* Hero UI Layer: Flex column spanning 100svh */
 .hero-ui {
   position: relative;
   z-index: 3;
   width: 100%;
   height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 36px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 44px 20px;
-  pointer-events: none; /* children enable pointer events */
 }
 
-.hero-ui * {
-  pointer-events: auto;
-}
-
-/* Navigation */
+/* Nav */
 .hero-nav {
   display: flex;
   align-items: center;
@@ -247,10 +218,15 @@ body {
   color: var(--paper);
 }
 
+.brand-sub {
+  color: var(--gold);
+  font-weight: 500;
+}
+
 .nav-center {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.16em;
@@ -275,22 +251,28 @@ body {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
-.nav-subscribe {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.nav-socials {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-social-icon {
   color: var(--paper);
-  text-decoration: none;
-  padding: 6px 4px;
-  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.nav-subscribe:hover {
+.nav-social-icon:hover {
+  opacity: 1;
   color: var(--gold);
+  transform: translateY(-1px);
 }
 
 .nav-pill-work {
@@ -314,7 +296,7 @@ body {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
-/* Hero Main Section: Clear central 36% for Aditya */
+/* Hero Main */
 .hero-main {
   display: flex;
   align-items: center;
@@ -323,44 +305,33 @@ body {
   flex: 1;
 }
 
-/* Left Copy: max-width 400px, pushed ~76px down to clear the giant word */
 .hero-left {
-  max-width: 400px;
-  width: 32%;
+  max-width: 440px;
+  width: 35%;
   display: flex;
   flex-direction: column;
-  transform: translateY(76px);
+  transform: translateY(60px);
 }
 
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.hero-role-badge {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 16px;
-}
-
-.eyebrow-rule {
-  width: 28px;
-  height: 1px;
-  background: var(--gold);
-  display: inline-block;
-  opacity: 0.85;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .hero-title {
   font-family: 'Instrument Serif', Georgia, serif;
-  font-size: clamp(44px, 4.8vw, 76px);
-  line-height: 0.95;
+  font-size: clamp(48px, 5.5vw, 76px);
+  line-height: 0.94;
   font-weight: 400;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   color: var(--paper);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .hero-title em {
@@ -368,19 +339,29 @@ body {
   color: var(--gold);
 }
 
+.hero-subtitle-tag {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+
 .hero-lede {
   font-family: 'Manrope', sans-serif;
-  font-size: 15px;
-  line-height: 1.55;
-  color: rgba(239, 227, 210, 0.85);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(239, 227, 210, 0.88);
   font-weight: 400;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .hero-cta-group {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .btn-build-log {
@@ -389,9 +370,9 @@ body {
   gap: 12px;
   background: var(--ink);
   color: var(--paper);
-  border: 1px solid rgba(240, 179, 90, 0.25);
+  border: 1px solid rgba(240, 179, 90, 0.3);
   border-radius: 9999px;
-  padding: 8px 10px 8px 22px;
+  padding: 8px 10px 8px 20px;
   text-decoration: none;
   font-family: 'Manrope', sans-serif;
   font-weight: 600;
@@ -423,29 +404,53 @@ body {
   transform: translateX(2px);
 }
 
-.link-glowrova {
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  padding: 10px 18px;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease);
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btn-hero-ghost {
+  display: inline-flex;
+  align-items: center;
   color: var(--paper);
   font-family: 'Manrope', sans-serif;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
-  text-decoration-color: rgba(239, 227, 210, 0.45);
+  text-decoration-color: rgba(239, 227, 210, 0.4);
   transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-.link-glowrova:hover {
+.btn-hero-ghost:hover {
   color: var(--gold);
   text-decoration-color: var(--gold);
 }
 
-/* Center Spacer: keeps central 36% clear of any text */
+/* Center Spacer */
 .hero-spacer {
-  width: 36%;
+  width: 32%;
   pointer-events: none;
 }
 
-/* Right Cluster: min(380px, 30vw) */
+/* Right Cluster */
 .hero-right {
   min-width: 320px;
   max-width: 380px;
@@ -455,44 +460,28 @@ body {
   gap: 20px;
 }
 
-/* Trust row: 4 overlapping gradient avatars with label */
 .trust-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
-.avatar-stack {
-  display: flex;
-  align-items: center;
-}
-
-.avatar-disc {
-  width: 28px;
-  height: 28px;
+.live-pulse-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: 2px solid var(--panel);
-  margin-left: -8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background: #34D399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+  animation: pulse-ring 2s infinite;
 }
-
-.avatar-disc:first-child {
-  margin-left: 0;
-}
-
-.avatar-disc-1 { background: linear-gradient(135deg, #F0B35A, #B98555); }
-.avatar-disc-2 { background: linear-gradient(135deg, #0E7C86, #1A120C); }
-.avatar-disc-3 { background: linear-gradient(135deg, #EFE3D2, #6A5342); }
-.avatar-disc-4 { background: linear-gradient(135deg, #D4924B, #0E7C86); }
 
 .trust-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: rgba(239, 227, 210, 0.85);
+  color: rgba(239, 227, 210, 0.9);
   letter-spacing: 0.05em;
 }
 
-/* Hero Cards Side by Side */
 .cards-row {
   display: flex;
   gap: 14px;
@@ -597,7 +586,7 @@ body {
   padding: 2px 0 4px;
 }
 
-/* Bottom Strip: Founder 01 Aditya, Location, Replay Pill */
+/* Bottom Strip */
 .hero-strip {
   display: flex;
   align-items: center;
@@ -639,14 +628,12 @@ body {
 }
 
 .replay-pill {
-  display: inline-flex;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
   padding: 6px 16px;
   color: var(--paper);
   font-family: 'JetBrains Mono', monospace;
@@ -672,8 +659,520 @@ body {
 }
 
 /* ==========================================================================
-   BELOW THE FOLD SECTION: "WHY NO FILTER"
-   Gradient from --bg to --paper over the first 220px with hairline on top.
+   FEATURED PROJECT: GLOWROVA CASE STUDY
+   ========================================================================== */
+.section-case-study {
+  position: relative;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 100px 44px 110px;
+  border-top: 1px solid var(--line);
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(26, 18, 12, 0.08);
+  border: 1px solid rgba(26, 18, 12, 0.12);
+  border-radius: 9999px;
+  padding: 6px 14px;
+}
+
+.section-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.section-h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(38px, 4.8vw, 68px);
+  line-height: 1.02;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.section-lede {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 880px;
+  margin-bottom: 32px;
+}
+
+.case-links-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 52px;
+}
+
+.btn-case-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 9999px;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 20px rgba(26, 18, 12, 0.16);
+  transition: transform 0.2s var(--ease), background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-case-primary:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(26, 18, 12, 0.24);
+}
+
+.btn-case-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(26, 18, 12, 0.25);
+  border-radius: 9999px;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  transition: transform 0.2s var(--ease), border-color 0.2s ease, background 0.2s ease;
+}
+
+.btn-case-secondary:hover {
+  background: rgba(26, 18, 12, 0.05);
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+/* 3 Contributions Grid */
+.contributions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.contribution-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(26, 18, 12, 0.09);
+  border-radius: 20px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.contribution-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contribution-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 179, 90, 0.6);
+  box-shadow: 0 16px 36px rgba(26, 18, 12, 0.08);
+}
+
+.contribution-card-accent {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 179, 90, 0.15) 100%);
+  border-color: rgba(240, 179, 90, 0.35);
+}
+
+.contribution-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contribution-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.contribution-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.contribution-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.62;
+  color: var(--ink-2);
+}
+
+.tech-stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tech-chip {
+  background: rgba(26, 18, 12, 0.06);
+  border: 1px solid rgba(26, 18, 12, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.contribution-award-pill {
+  margin-top: 8px;
+  background: rgba(240, 179, 90, 0.18);
+  border: 1px solid rgba(240, 179, 90, 0.45);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7A4B1A;
+}
+
+/* ==========================================================================
+   RECOGNITION SECTION (Award Banner)
+   ========================================================================== */
+.section-recognition {
+  position: relative;
+  width: 100%;
+  background: var(--panel);
+  color: var(--paper);
+  padding: 80px 44px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.recognition-box {
+  background: linear-gradient(135deg, rgba(42, 30, 21, 0.95) 0%, rgba(27, 19, 13, 0.98) 100%);
+  border: 1.5px solid rgba(240, 179, 90, 0.35);
+  border-radius: 24px;
+  padding: 44px 48px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 36px;
+  align-items: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.recognition-box.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.recognition-badge-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.award-laurel-badge {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #F5C678, #D4924B);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(240, 179, 90, 0.3);
+}
+
+.award-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.award-meta-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.award-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(32px, 3.8vw, 48px);
+  line-height: 1.05;
+  color: var(--paper);
+  margin-bottom: 14px;
+}
+
+.award-description {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(239, 227, 210, 0.85);
+  margin-bottom: 20px;
+}
+
+.award-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.note-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.note-subtext {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(239, 227, 210, 0.55);
+}
+
+/* ==========================================================================
+   OTHER WORK SECTION (Design, Social Media, Public Speaking, YouTube)
+   ========================================================================== */
+.section-other-work {
+  position: relative;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 100px 44px 110px;
+  border-top: 1px solid var(--line);
+}
+
+.section-header-compact {
+  max-width: 800px;
+  margin-bottom: 52px;
+}
+
+.other-work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.other-work-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(26, 18, 12, 0.09);
+  border-radius: 20px;
+  padding: 34px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.other-work-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.other-work-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 179, 90, 0.5);
+  box-shadow: 0 16px 36px rgba(26, 18, 12, 0.08);
+}
+
+.other-work-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.other-work-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.other-work-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--ink-3);
+}
+
+.other-work-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.other-work-desc {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.62;
+  color: var(--ink-2);
+}
+
+.other-work-features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.feature-item {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.other-work-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-top: 12px;
+  transition: color 0.2s ease;
+}
+
+.other-work-link:hover {
+  color: var(--ink);
+}
+
+/* Design Samples Placeholder (Explicit requirement) */
+.design-placeholder-frame {
+  margin-top: 12px;
+  border: 1.5px dashed rgba(26, 18, 12, 0.22);
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+  background: rgba(26, 18, 12, 0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.placeholder-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(26, 18, 12, 0.06);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.placeholder-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+
+.placeholder-sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: var(--ink-3);
+  max-width: 320px;
+}
+
+.btn-placeholder-action {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-placeholder-action:hover {
+  transform: translateY(-1px);
+  background: #000;
+}
+
+/* ==========================================================================
+   BELOW THE FOLD: "WHY NO FILTER" (Build notes, Bento grid, Stats band)
    ========================================================================== */
 .section-notes {
   position: relative;
@@ -689,7 +1188,6 @@ body {
   margin: 0 auto;
 }
 
-/* Two-column Header */
 .notes-header {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -731,14 +1229,13 @@ body {
   color: var(--ink-2);
 }
 
-/* Bento Grid: 1.35fr 1fr 1fr, 16px gap */
+/* Bento Grid */
 .bento-grid {
   display: grid;
   grid-template-columns: 1.35fr 1fr 1fr;
   gap: 16px;
 }
 
-/* Common Note Card Styles */
 .note-card {
   border-radius: 22px;
   padding: 32px;
@@ -783,7 +1280,6 @@ body {
   line-height: 1.6;
 }
 
-/* Note 1: Dark, spanning two rows */
 .note-card-dark {
   grid-row: span 2;
   background: var(--panel);
@@ -858,7 +1354,6 @@ body {
   fill: rgba(239, 227, 210, 0.55);
 }
 
-/* Light Cards: rgba(255,255,255,.45), hairline border, 22px radius */
 .note-card-light {
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(16px);
@@ -879,7 +1374,6 @@ body {
   color: var(--ink-2);
 }
 
-/* Swatch Chips */
 .swatch-chips {
   display: flex;
   flex-wrap: wrap;
@@ -898,7 +1392,6 @@ body {
   color: var(--ink);
 }
 
-/* Note 4: Spanning two columns */
 .note-card-span-2 {
   grid-column: span 2;
   flex-direction: row;
@@ -929,9 +1422,7 @@ body {
   transform: rotate(45deg);
 }
 
-/* ==========================================================================
-   STATS BAND (Dark, 4 columns with faint dividers)
-   ========================================================================== */
+/* Stats Band */
 .stats-band {
   background: var(--panel);
   color: var(--paper);
@@ -991,7 +1482,6 @@ body {
   color: var(--gold);
 }
 
-/* Ruler track for SHIPPED */
 .ruler-track {
   width: 100%;
   height: 6px;
@@ -1011,10 +1501,9 @@ body {
 }
 
 .stats-band.is-visible .ruler-fill {
-  width: 80%;
+  width: 85%;
 }
 
-/* Team circles: solid circle beside a dashed one */
 .team-circles {
   display: flex;
   align-items: center;
@@ -1036,7 +1525,6 @@ body {
   border: 1.5px dashed var(--gold);
 }
 
-/* Shimmer bar for FILTER "Zero" */
 .shimmer-bar {
   width: 100%;
   height: 6px;
@@ -1052,7 +1540,6 @@ body {
   100% { background-position: -100% 0; }
 }
 
-/* Cadence curve for CADENCE "Every week" */
 .cadence-curve-svg {
   width: 100%;
   height: 18px;
@@ -1072,7 +1559,112 @@ body {
   stroke-dashoffset: 0;
 }
 
-/* Closing Call to Action */
+/* ==========================================================================
+   OPPORTUNITIES SECTION (Internships, Freelance, Collaboration)
+   ========================================================================== */
+.section-opportunities {
+  position: relative;
+  width: 100%;
+  background: var(--panel);
+  color: var(--paper);
+  padding: 100px 44px 110px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section-opportunities .section-pill {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.section-opportunities .section-h2 {
+  color: var(--paper);
+}
+
+.section-opportunities .section-lede {
+  color: rgba(239, 227, 210, 0.85);
+}
+
+.opportunities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.opportunity-card {
+  background: linear-gradient(145deg, rgba(42, 30, 21, 0.85) 0%, rgba(27, 19, 13, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), border-color 0.25s ease;
+}
+
+.opportunity-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.opportunity-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+
+.opp-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.opp-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--paper);
+}
+
+.opp-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(239, 227, 210, 0.8);
+}
+
+.opp-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 10px 18px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.opp-action-btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   CLOSING & DIRECT CONTACT SECTION
+   ========================================================================== */
 .closing-block {
   text-align: center;
   margin-top: 72px;
@@ -1225,38 +1817,70 @@ body {
   color: var(--ink);
 }
 
-.nav-socials {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.nav-social-icon {
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+  background: var(--panel);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 40px 36px 48px;
   color: var(--paper);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.nav-social-icon:hover {
-  opacity: 1;
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(239, 227, 210, 0.6);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-links a {
+  color: rgba(239, 227, 210, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
   color: var(--gold);
-  transform: translateY(-1px);
+}
+
+.footer-copy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(239, 227, 210, 0.45);
+  width: 100%;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* ==========================================================================
    RESPONSIVE DESIGN (<= 900px)
-   --------------------------------------------------------------------------
-   - Hide nav links & SUBSCRIBE
-   - Giant word goes to 22vw
-   - Hero becomes a flex column with copy & cards flowing below the video
-     (46svh top padding, object-position 50% 20% so his face stays in view)
-   - Drop second card's offset
-   - Overlay becomes bottom-up dark gradient
-   - Notes go to one column, stats to 2x2
-   - No horizontal scroll, 16px side gutter throughout
    ========================================================================== */
 @media (max-width: 900px) {
   .hero {
@@ -1287,16 +1911,10 @@ body {
     padding: 20px 16px 24px;
   }
 
-  /* Nav adjustments */
   .nav-center {
     display: none;
   }
 
-  .nav-subscribe {
-    display: none;
-  }
-
-  /* Hero Main Content flows vertically below the video area */
   .hero-main {
     flex-direction: column;
     align-items: flex-start;
@@ -1324,7 +1942,6 @@ body {
     width: 100%;
   }
 
-  /* Drop second card's offset on mobile */
   .hero-card--dropped {
     transform: none;
   }
@@ -1333,7 +1950,6 @@ body {
     transform: translateY(-2px);
   }
 
-  /* Bottom Strip */
   .hero-strip {
     margin-top: 40px;
     flex-wrap: wrap;
@@ -1342,9 +1958,38 @@ body {
     padding-bottom: 8px;
   }
 
-  /* Notes section on mobile */
-  .section-notes {
-    padding: 72px 16px 80px;
+  .section-notes,
+  .section-case-study,
+  .section-recognition,
+  .section-other-work,
+  .section-opportunities {
+    padding: 72px 18px 80px;
+  }
+
+  .contributions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recognition-box {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 32px 24px;
+  }
+
+  .recognition-badge-col {
+    margin-bottom: 8px;
+  }
+
+  .award-footer-note {
+    justify-content: center;
+  }
+
+  .other-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .opportunities-grid {
+    grid-template-columns: 1fr;
   }
 
   .notes-header {
@@ -1372,7 +2017,6 @@ body {
     align-items: flex-start;
   }
 
-  /* Stats band goes to 2x2 grid */
   .stats-band {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
@@ -1387,6 +2031,12 @@ body {
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1394,124 +2044,125 @@ body {
     grid-template-columns: 1fr;
     gap: 12px;
   }
+  .stats-band {
+    grid-template-columns: 1fr;
+  }
+  .stat-col::after {
+    display: none !important;
+  }
 }
 </style>
 </head>
 <body>
 
 <!-- ==========================================================================
-     HERO STAGE (100svh, dark-text-free, video holds on last frame facing camera)
+     HERO STAGE (100svh, dynamic blend with hero.mp4)
      ========================================================================== -->
 <header class="hero" id="hero">
-  <!-- Video Layer: 1280x720, 24fps, 8s, NO loop so final frame holds -->
   <video id="hero-video" class="hero-video" src="hero.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
 
-  <!-- The Trick: Giant display serif behind him using mix-blend-mode: darken -->
   <div class="giant-word" id="giant-word" aria-hidden="true">
     No <em>Filter</em>
   </div>
 
-  <!-- Legibility Overlay: Left/right soft gradients + bottom gradient covering generator mark -->
   <div class="hero-overlay" aria-hidden="true"></div>
 
-  <!-- Hero UI Layer: Revealed after REVEAL_AT (7.4s) -->
   <div class="hero-ui">
     <!-- Top Nav -->
     <nav class="hero-nav rv" style="--d: 1;">
-      <a href="#" class="nav-brand" aria-label="NO FILTER ENGINEER Home">
+      <a href="#" class="nav-brand" aria-label="Aditya Kumar — No Filter Engineer">
         <div class="brand-mark" aria-hidden="true">
           <div class="brand-mark-inner"></div>
         </div>
-        <span class="brand-text">NO FILTER ENGINEER</span>
+        <span class="brand-text">ADITYA KUMAR <span class="brand-sub">· NO FILTER</span></span>
       </a>
 
       <div class="nav-center">
-        <a href="#build-log">BUILD LOG</a>
+        <a href="#glowrova">GLOWROVA</a>
         <span class="dot">·</span>
-        <a href="https://glowrova.in" target="_blank" rel="noopener noreferrer">GLOWROVA</a>
+        <a href="#recognition">AWARD</a>
         <span class="dot">·</span>
-        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer">VIDEOS</a>
+        <a href="#other-work">OTHER WORK</a>
         <span class="dot">·</span>
-        <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer">GITHUB</a>
+        <a href="#journey">JOURNEY</a>
         <span class="dot">·</span>
-        <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+        <a href="#opportunities">OPPORTUNITIES</a>
         <span class="dot">·</span>
         <a href="#contact">CONTACT</a>
       </div>
 
       <div class="nav-right">
-        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="nav-subscribe">SUBSCRIBE</a>
         <div class="nav-socials">
-          <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on GitHub">
+          <a href="https://github.com/aadi-010" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on GitHub" title="GitHub">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           </a>
-          <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on LinkedIn">
+          <a href="https://www.linkedin.com/in/aditya-kumar-942617346/" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on LinkedIn" title="LinkedIn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
           </a>
-          <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on Instagram">
+          <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="No Filter Engineer on YouTube" title="YouTube">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="nav-social-icon" aria-label="Aditya on Instagram" title="Instagram">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </a>
         </div>
-        <a href="mailto:iamaadi74@gmail.com" class="nav-pill-work">WORK WITH ME</a>
+        <a href="#contact" class="nav-pill-work">CONTACT ME</a>
       </div>
     </nav>
 
-    <!-- Hero Main (Left copy + clear 36% center + Right cards) -->
+    <!-- Hero Main -->
     <div class="hero-main">
-      <!-- Left Copy (clears giant word with translateY 76px) -->
       <div class="hero-left">
-        <div class="hero-eyebrow rv" style="--d: 2;">
-          <span class="eyebrow-rule" aria-hidden="true"></span>
-          <span>BUILDING GLOWROVA IN PUBLIC</span>
+        <div class="hero-role-badge rv" style="--d: 2;">
+          COMPUTER SCIENCE STUDENT · FOUNDER &amp; PRODUCT BUILDER AT GLOWROVA
         </div>
 
         <h1 class="hero-title rv" style="--d: 3;">
-          Shipping a startup with <em>no filter</em>
+          Aditya <em>Kumar</em>
         </h1>
 
+        <div class="hero-subtitle-tag rv" style="--d: 3.5;">
+          Building Glowrova in Public with No Filter
+        </div>
+
         <p class="hero-lede rv" style="--d: 4;">
-          B.Tech student from Gaya, now in Hyderabad, building an AI salon booking platform for Tier-2 India and documenting every week.
+          First-year Computer Science student building <strong>Glowrova</strong>—an AI salon booking platform for Tier-2 India. Working across the complete product: coding the codebase, pitching to investors and audiences, and onboarding local shops on the ground, alongside graphic design, public speaking, and documenting the founder journey with no filter.
         </p>
 
         <div class="hero-cta-group rv" style="--d: 5;">
-          <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="btn-build-log">
-            <span>Watch the build log</span>
+          <a href="#glowrova" class="btn-build-log">
+            <span>Explore My Work</span>
             <span class="btn-arrow-circle" aria-hidden="true">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </a>
-          <a href="https://glowrova.in" target="_blank" rel="noopener noreferrer" class="link-glowrova">
-            See Glowrova ↗
+          <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <span>Watch My Journey</span>
+          </a>
+          <a href="#contact" class="btn-hero-ghost">
+            <span>Contact Me ↗</span>
           </a>
         </div>
       </div>
 
-      <!-- Clear central 36% buffer for Aditya's face and shoulders -->
       <div class="hero-spacer" aria-hidden="true"></div>
 
-      <!-- Right Cluster: min(380px, 30vw) -->
+      <!-- Right Cluster -->
       <div class="hero-right">
-        <!-- Trust Row -->
         <div class="trust-row rv" style="--d: 6;">
-          <div class="avatar-stack" aria-hidden="true">
-            <div class="avatar-disc avatar-disc-1"></div>
-            <div class="avatar-disc avatar-disc-2"></div>
-            <div class="avatar-disc avatar-disc-3"></div>
-            <div class="avatar-disc avatar-disc-4"></div>
-          </div>
-          <span class="trust-label">[N]K watching the build</span>
+          <div class="live-pulse-dot" aria-hidden="true"></div>
+          <span class="trust-label">1st-Year CS Student · Shipping in Public</span>
         </div>
 
-        <!-- Two Dark Cards side by side (second dropped 18px) -->
         <div class="cards-row">
           <!-- Card 1: GLOWROVA / 01 -->
           <div class="hero-card rv" style="--d: 7;">
             <div class="card-header">GLOWROVA / 01</div>
             <div class="card-thumb-container">
-              <!-- Fractional crop: x=0.34, y=0.02, size=0.32 -->
               <canvas class="card-thumb-canvas" width="240" height="240" data-crop="0.34,0.02,0.32" aria-hidden="true"></canvas>
               <div class="thumb-overlay">
-                <span class="thumb-caption">The founder</span>
+                <span class="thumb-caption">Product builder</span>
                 <div class="thumb-dots">
                   <span class="dot gold"></span>
                   <span class="dot"></span>
@@ -1519,17 +2170,16 @@ body {
                 </div>
               </div>
             </div>
-            <div class="card-stat">Solo</div>
+            <div class="card-stat">Founder</div>
           </div>
 
-          <!-- Card 2: CHANNEL / 02 (dropped 18px) -->
+          <!-- Card 2: CHANNEL / 02 -->
           <div class="hero-card hero-card--dropped rv" style="--d: 8;">
-            <div class="card-header">CHANNEL / 02</div>
+            <div class="card-header">BUILD LOG / 02</div>
             <div class="card-thumb-container">
-              <!-- Fractional crop: x=0.40, y=0.14, size=0.18 -->
               <canvas class="card-thumb-canvas" width="240" height="240" data-crop="0.40,0.14,0.18" aria-hidden="true"></canvas>
               <div class="thumb-overlay">
-                <span class="thumb-caption">Eyes on the goal</span>
+                <span class="thumb-caption">Weekly devlogs</span>
                 <div class="thumb-dots">
                   <span class="dot gold"></span>
                   <span class="dot"></span>
@@ -1537,7 +2187,7 @@ body {
                 </div>
               </div>
             </div>
-            <div class="card-stat">Tier-2</div>
+            <div class="card-stat">YouTube</div>
           </div>
         </div>
       </div>
@@ -1547,14 +2197,14 @@ body {
     <div class="hero-strip rv" style="--d: 9;">
       <div class="strip-founder">
         <span class="strip-founder-mono">FOUNDER 01</span>
-        <span class="strip-founder-name">Aditya</span>
+        <span class="strip-founder-name">Aditya Kumar</span>
       </div>
 
       <div class="strip-location">
-        HYDERABAD · 17.38° N
+        HYDERABAD · GAYA ORIGIN
       </div>
 
-      <button type="button" id="replay-btn" class="replay-pill" aria-label="Replay founder intro video">
+      <button type="button" id="replay-btn" class="replay-pill" aria-label="Replay intro video">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
         <span>Replay</span>
       </button>
@@ -1563,15 +2213,237 @@ body {
 </header>
 
 <!-- ==========================================================================
-     BELOW THE FOLD: "WHY NO FILTER" (Build notes, Bento grid, Stats band)
+     FEATURED PROJECT / CASE STUDY: GLOWROVA
      ========================================================================== -->
-<section class="section-notes" id="build-log">
+<section class="section-case-study" id="glowrova">
+  <div class="content-container">
+    <div class="section-tag-row">
+      <span class="section-pill">FEATURED PROJECT &amp; CASE STUDY</span>
+      <span class="section-meta">SOLO FOUNDER · PRODUCT &amp; ENGINEERING</span>
+    </div>
+
+    <div class="case-study-header">
+      <h2 class="section-h2">Glowrova — AI Beauty &amp; Grooming Platform for Tier-2 India</h2>
+      <p class="section-lede">
+        Glowrova is an AI-driven beauty &amp; grooming platform designed specifically for Tier-2 Bharat. While metros are saturated with generic booking marketplaces, neighbourhood salons in Tier-2 cities suffer from long walk-in queues, paper registers, and zero digital scheduling tools. Glowrova connects customers with verified neighbourhood salons through smart chair reservations, WhatsApp booking flows, and AI face/hair consultations.
+      </p>
+
+      <div class="case-links-row">
+        <a href="https://glowrova.in" target="_blank" rel="noopener noreferrer" class="btn-case-primary">
+          <span>Customer Platform (glowrova.in)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+        <a href="https://glowrova.partner.in" target="_blank" rel="noopener noreferrer" class="btn-case-secondary">
+          <span>Partner Platform (glowrova.partner.in)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 Core Distinguished Contributions -->
+    <div class="contributions-grid">
+      <!-- 1. Coding & Architecture -->
+      <div class="contribution-card">
+        <div>
+          <div class="contribution-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <div class="contribution-tag" style="margin-top: 14px;">01 · ARCHITECTURE &amp; CODE</div>
+          <h3 class="contribution-title" style="margin-top: 6px;">Product &amp; Full-Stack Coding</h3>
+          <p class="contribution-text" style="margin-top: 10px;">
+            Architected and engineered both the responsive consumer portal and partner onboarding experiences. Designed lightweight, fast-loading interfaces that function reliably on lower-bandwidth mobile networks in Tier-2 regions.
+          </p>
+        </div>
+        <div class="tech-stack-chips">
+          <span class="tech-chip">HTML5 / Modern CSS</span>
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">AI Face/Style Workflows</span>
+          <span class="tech-chip">Responsive Web</span>
+          <span class="tech-chip">Partner Portals</span>
+        </div>
+      </div>
+
+      <!-- 2. Pitching & Storytelling -->
+      <div class="contribution-card contribution-card-accent">
+        <div>
+          <div class="contribution-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          </div>
+          <div class="contribution-tag" style="margin-top: 14px;">02 · PITCHING &amp; STORYTELLING</div>
+          <h3 class="contribution-title" style="margin-top: 6px;">Founder Pitch &amp; Validation</h3>
+          <p class="contribution-text" style="margin-top: 10px;">
+            Formulated the market thesis, unit dynamics, and product roadmap for startup pitch competitions. Communicated how local salon digitization solves ground-level friction for both consumers and local business owners.
+          </p>
+        </div>
+        <div class="contribution-award-pill">
+          🏆 Won: Most Investable Award — Udyam Tatva
+        </div>
+      </div>
+
+      <!-- 3. Shop Onboarding & Ground Execution -->
+      <div class="contribution-card">
+        <div>
+          <div class="contribution-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div class="contribution-tag" style="margin-top: 14px;">03 · GROUND EXECUTION</div>
+          <h3 class="contribution-title" style="margin-top: 6px;">Shop Onboarding &amp; Field Work</h3>
+          <p class="contribution-text" style="margin-top: 10px;">
+            Stepped out from behind the screen to visit neighbourhood barbers and salons in person. Studied actual weekend rush-hour queues, addressed digital hesitations, and tested booking workflows directly with salon owners.
+          </p>
+        </div>
+        <div class="tech-stack-chips">
+          <span class="tech-chip">Field Discovery</span>
+          <span class="tech-chip">Partner Workflow Testing</span>
+          <span class="tech-chip">Tier-2 Localization</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     RECOGNITION SECTION (Award Highlight)
+     ========================================================================== -->
+<section class="section-recognition" id="recognition">
+  <div class="content-container">
+    <div class="recognition-box">
+      <div class="recognition-badge-col">
+        <div class="award-laurel-badge" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <span class="award-tag">AWARDS &amp; HONORS</span>
+      </div>
+      <div class="recognition-content-col">
+        <div class="award-meta-kicker">STARTUP PITCH COMPETITION</div>
+        <h3 class="award-title">Most Investable Award — Udyam Tatva</h3>
+        <p class="award-description">
+          Honored with the <strong>“Most Investable Award”</strong> by <strong>Udyam Tatva</strong> for presenting Glowrova's market potential, Tier-2 salon problem validation, and execution roadmap. Recognized for commercial viability and addressing Bharat's unorganized local salon queues.
+        </p>
+        <div class="award-footer-note">
+          <span class="note-pill">Verified Founder Award</span>
+          <span class="note-subtext">[Certificate and event details available on request / marked for document upload]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     OTHER WORK SECTION (Design, Social Media, Public Speaking, YouTube)
+     ========================================================================== -->
+<section class="section-other-work" id="other-work">
+  <div class="content-container">
+    <div class="section-header-compact">
+      <span class="section-pill">CROSS-DISCIPLINARY SKILLS</span>
+      <h2 class="section-h2">Design, Speaking &amp; Content Creation</h2>
+      <p class="section-lede">
+        Beyond writing code, I combine visual craft, communication, and creator distribution to build products that resonate with real people.
+      </p>
+    </div>
+
+    <div class="other-work-grid">
+      <!-- 1. Graphic Design -->
+      <div class="other-work-card">
+        <div>
+          <div class="other-work-top">
+            <span class="other-work-badge">VISUAL CRAFT</span>
+            <svg class="other-work-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          </div>
+          <h3 class="other-work-title" style="margin-top: 14px;">Graphic Design</h3>
+          <p class="other-work-desc" style="margin-top: 8px;">
+            Designing brand identities, investor pitch decks, UI graphics, typography systems, and promotional banners with careful aesthetic balance and intentional design hierarchy.
+          </p>
+        </div>
+
+        <div class="design-placeholder-frame">
+          <div class="placeholder-icon-wrap" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <span class="placeholder-title">Add design samples</span>
+          <span class="placeholder-sub">Portfolio of brand assets, pitch decks &amp; social designs available on request</span>
+          <a href="mailto:iamaadi74@gmail.com?subject=Design%20Portfolio%20Inquiry%20-%20Aditya%20Kumar" class="btn-placeholder-action">Request Design Samples ↗</a>
+        </div>
+      </div>
+
+      <!-- 2. Social Media Management -->
+      <div class="other-work-card">
+        <div>
+          <div class="other-work-top">
+            <span class="other-work-badge">GROWTH &amp; STORYTELLING</span>
+            <svg class="other-work-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </div>
+          <h3 class="other-work-title" style="margin-top: 14px;">Social Media Management</h3>
+          <p class="other-work-desc" style="margin-top: 8px;">
+            Managing founder-led social distribution, content strategies, and organic audience engagement across Instagram and digital platforms. Designing visual systems for reels, carousels, and educational tech breakdowns.
+          </p>
+          <div class="other-work-features">
+            <div class="feature-item">✓ Content planning &amp; visual hook design</div>
+            <div class="feature-item">✓ Building in public distribution strategy</div>
+            <div class="feature-item">✓ Reel scripting, thumbnail &amp; carousel creation</div>
+          </div>
+        </div>
+        <a href="https://www.instagram.com/nofilterengineer/?hl=en" target="_blank" rel="noopener noreferrer" class="other-work-link">
+          <span>See Instagram @nofilterengineer ↗</span>
+        </a>
+      </div>
+
+      <!-- 3. Public Speaking -->
+      <div class="other-work-card">
+        <div>
+          <div class="other-work-top">
+            <span class="other-work-badge">COMMUNICATION</span>
+            <svg class="other-work-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          </div>
+          <h3 class="other-work-title" style="margin-top: 14px;">Public Speaking &amp; Pitching</h3>
+          <p class="other-work-desc" style="margin-top: 8px;">
+            Experienced in pitching startup concepts on competitive stages, presenting technical ideas to non-technical stakeholders, and speaking before student and founder audiences with authentic clarity.
+          </p>
+          <div class="other-work-features">
+            <div class="feature-item">✓ Startup pitch presentations &amp; jury Q&amp;A</div>
+            <div class="feature-item">✓ Live product demos &amp; customer storytelling</div>
+            <div class="feature-item">✓ Breaking down technical products with simplicity</div>
+          </div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); margin-top: 12px;">
+          Available for startup talks &amp; tech student panels
+        </div>
+      </div>
+
+      <!-- 4. YouTube -->
+      <div class="other-work-card">
+        <div>
+          <div class="other-work-top">
+            <span class="other-work-badge">CREATOR &amp; DEVS</span>
+            <svg class="other-work-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <h3 class="other-work-title" style="margin-top: 14px;">YouTube @NoFilterEngineer</h3>
+          <p class="other-work-desc" style="margin-top: 8px;">
+            Documenting the unfiltered realities of building software and startups from scratch as a first-year college student. Sharing real bugs, architecture decisions, customer feedback, and developer sprints.
+          </p>
+          <div class="other-work-features">
+            <div class="feature-item">✓ Raw engineering build logs &amp; architecture walkthroughs</div>
+            <div class="feature-item">✓ Founder insights: cold calls, pivots &amp; execution</div>
+            <div class="feature-item">✓ Weekly videos published with radical honesty</div>
+          </div>
+        </div>
+        <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="other-work-link">
+          <span>Watch on YouTube @NoFilterEngineer ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     ABOUT / JOURNEY SECTION ("WHY NO FILTER")
+     ========================================================================== -->
+<section class="section-notes" id="journey">
   <div class="notes-container">
-    <!-- Two-column header -->
     <div class="notes-header">
       <div>
         <div class="notes-kicker">
-          <span class="kicker-num">02</span> BUILD NOTES: WHY NO FILTER
+          <span class="kicker-num">04</span> FOUNDER JOURNEY: WHY NO FILTER
         </div>
         <h2 class="notes-h2">
           Build it in the open, keep what's real, ship every week
@@ -1579,56 +2451,51 @@ body {
       </div>
       <div>
         <p class="notes-intro-p">
-          Most tech narratives are told in retrospect: sanitized, cinematic, and scrubbed of doubt. Starting from Gaya, Bihar, with no industry pedigree, I chose to document the raw build in public. The broken migrations, the awkward user calls, the architecture pivots—everything stays on tape. Real leverage comes from radical honesty.
+          Most startup narratives are told in retrospect: polished, cinematic, and scrubbed of doubt. Starting from Gaya, Bihar, as a first-year Computer Science student, I chose to document the raw build in public. The broken migrations, the awkward user calls, the architecture pivots—everything stays on tape. Real leverage comes from radical honesty.
         </p>
       </div>
     </div>
 
-    <!-- Bento Grid (1.35fr 1fr 1fr, 16px gap) -->
+    <!-- Bento Grid -->
     <div class="bento-grid">
-      <!-- 1. Dark Card (spanning 2 rows): "From Gaya to Hyderabad" -->
+      <!-- 1. Dark Card: "From Gaya to Hyderabad" -->
       <article class="note-card note-card-dark" id="note-card-gaya">
         <div>
           <div class="note-index">NOTE 01 · ORIGIN</div>
           <h3 class="note-title">From Gaya to Hyderabad</h3>
           <p class="note-text">
-            Tracing the trajectory from a small ancient city in Bihar to Hyderabad’s tech core. Moving hundreds of miles with a laptop and a single conviction: building scalable digital rails for Bharat's unorganized local markets.
+            Tracing the trajectory from Gaya in Bihar to Hyderabad’s tech core. Moving hundreds of miles with a laptop and a single conviction: building scalable digital rails for Bharat's unorganized local markets.
           </p>
         </div>
 
         <div class="map-arc-box">
           <svg class="map-arc-svg" viewBox="0 0 340 180" aria-label="Journey from Gaya to Hyderabad">
-            <!-- Self-drawing curved arc -->
             <path class="map-arc-path" d="M 60 40 Q 220 50 260 145" />
-
-            <!-- Gaya Marker -->
             <circle class="map-node-pulse" cx="60" cy="40" r="8" />
             <circle class="map-node" cx="60" cy="40" r="4.5" />
             <text class="map-label" x="72" y="38">GAYA</text>
             <text class="map-sublabel" x="72" y="50">BIHAR · ORIGIN</text>
-
-            <!-- Hyderabad Marker -->
             <circle class="map-node-pulse" cx="260" cy="145" r="8" />
             <circle class="map-node" cx="260" cy="145" r="4.5" />
             <text class="map-label" x="180" y="145">HYDERABAD</text>
-            <text class="map-sublabel" x="180" y="157">TELANGANA · HQ</text>
+            <text class="map-sublabel" x="180" y="157">TELANGANA · BASE</text>
           </svg>
         </div>
       </article>
 
-      <!-- 2. Light Card: "Tier-2 first" with 3 swatch chips -->
+      <!-- 2. Light Card: "Tier-2 first" -->
       <article class="note-card note-card-light">
         <div>
           <div class="note-index">NOTE 02 · DEMOGRAPHY</div>
-          <h3 class="note-title">Tier-2 first</h3>
+          <h3 class="note-title">Tier-2 First</h3>
           <p class="note-text">
             While metros suffer from hyper-saturated salon marketplaces, Tier-2 cities hold high-frequency salon demand with zero structured queueing infrastructure.
           </p>
         </div>
         <div class="swatch-chips">
-          <span class="swatch-chip">[City 1]</span>
-          <span class="swatch-chip">[City 2]</span>
-          <span class="swatch-chip">[City 3]</span>
+          <span class="swatch-chip">Gaya</span>
+          <span class="swatch-chip">Tier-2 Bharat</span>
+          <span class="swatch-chip">Local Salons</span>
         </div>
       </article>
 
@@ -1643,7 +2510,7 @@ body {
         </div>
       </article>
 
-      <!-- 4. Light Card (spanning 2 columns): "Building in public" with SVG eye/target -->
+      <!-- 4. Light Card: "Building in public" -->
       <article class="note-card note-card-light note-card-span-2">
         <div>
           <div class="note-index">NOTE 04 · METHOD</div>
@@ -1659,12 +2526,10 @@ body {
         </div>
         <div class="target-icon-box" aria-hidden="true">
           <svg class="target-icon-svg" viewBox="0 0 100 100">
-            <!-- Concentric rings -->
             <circle cx="50" cy="50" r="42" stroke-dasharray="3 3"/>
             <circle cx="50" cy="50" r="28" stroke="var(--gold)"/>
             <circle cx="50" cy="50" r="14"/>
             <circle cx="50" cy="50" r="4" fill="var(--ink)"/>
-            <!-- Crosshairs -->
             <line x1="50" y1="2" x2="50" y2="20"/>
             <line x1="50" y1="80" x2="50" y2="98"/>
             <line x1="2" y1="50" x2="20" y2="50"/>
@@ -1674,35 +2539,31 @@ body {
       </article>
     </div>
 
-    <!-- Stats Band (4 columns with faint dividers) -->
+    <!-- Stats Band (Cleaned of fake placeholders) -->
     <div class="stats-band" id="stats-band">
-      <!-- 1. SHIPPED [N] features with ruler -->
       <div class="stat-col">
-        <span class="stat-label">SHIPPED</span>
-        <div class="stat-value">[N] <em>features</em></div>
-        <div class="ruler-track" title="80% sprint completion">
+        <span class="stat-label">SPRINTS</span>
+        <div class="stat-value">Weekly <em>builds</em></div>
+        <div class="ruler-track" title="Active Weekly Sprints">
           <div class="ruler-fill" id="ruler-bar"></div>
         </div>
       </div>
 
-      <!-- 2. TEAM "One" with solid circle beside dashed circle -->
       <div class="stat-col">
-        <span class="stat-label">TEAM</span>
-        <div class="stat-value">One</div>
+        <span class="stat-label">FOUNDER</span>
+        <div class="stat-value">1st-Year CS</div>
         <div class="team-circles">
           <span class="circle-solid" title="Founder"></span>
-          <span class="circle-dashed" title="Community & AI"></span>
+          <span class="circle-dashed" title="Community Driven"></span>
         </div>
       </div>
 
-      <!-- 3. FILTER "Zero" with shimmering teal-to-gold bar -->
       <div class="stat-col">
         <span class="stat-label">FILTER</span>
         <div class="stat-value">Zero</div>
         <div class="shimmer-bar"></div>
       </div>
 
-      <!-- 4. CADENCE "Every week" with self-drawing curve -->
       <div class="stat-col">
         <span class="stat-label">CADENCE</span>
         <div class="stat-value"><em>Every week</em></div>
@@ -1711,12 +2572,84 @@ body {
         </svg>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Closing Call to Action & Direct Contacts -->
-    <div class="closing-block" id="contact">
+<!-- ==========================================================================
+     OPPORTUNITIES SECTION (Internships, Freelance, Collaboration)
+     ========================================================================== -->
+<section class="section-opportunities" id="opportunities">
+  <div class="content-container">
+    <div class="section-header-compact">
+      <span class="section-pill">OPEN FOR WORK &amp; COLLABORATION</span>
+      <h2 class="section-h2">Ways We Can Work Together</h2>
+      <p class="section-lede">
+        Whether you are recruiting a hungry student engineer, need freelance creative support, or want to collaborate on Glowrova, I am always keen to connect.
+      </p>
+    </div>
+
+    <div class="opportunities-grid">
+      <!-- 1. Internships -->
+      <div class="opportunity-card">
+        <div>
+          <div class="opp-badge">HIRING &amp; TEAMS</div>
+          <h3 class="opp-title" style="margin-top: 12px;">Software Engineering Internships</h3>
+          <p class="opp-text" style="margin-top: 10px;">
+            As a 1st-year Computer Science student actively building full-stack applications, I bring extreme curiosity, fast learning speed, and strong ownership. Looking for internship roles in frontend, full-stack, or product engineering.
+          </p>
+        </div>
+        <a href="mailto:iamaadi74@gmail.com?subject=Internship%20Opportunity%20-%20Aditya%20Kumar" class="opp-action-btn">
+          <span>Discuss Internship Roles</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- 2. Freelance -->
+      <div class="opportunity-card">
+        <div>
+          <div class="opp-badge">CLIENTS &amp; CREATORS</div>
+          <h3 class="opp-title" style="margin-top: 12px;">Freelance Design &amp; Social Media</h3>
+          <p class="opp-text" style="margin-top: 10px;">
+            Helping startups, founders, and creators elevate their visual branding, design pitch-winning investor decks, and establish organic social media presence with high-converting visual systems and short-form workflows.
+          </p>
+        </div>
+        <a href="mailto:iamaadi74@gmail.com?subject=Freelance%20Design%20/%20Social%20Media%20Project" class="opp-action-btn">
+          <span>Book Freelance Project</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- 3. Collaboration -->
+      <div class="opportunity-card">
+        <div>
+          <div class="opp-badge">STARTUP &amp; MENTORSHIP</div>
+          <h3 class="opp-title" style="margin-top: 12px;">Glowrova Collaborators &amp; Advisors</h3>
+          <p class="opp-text" style="margin-top: 10px;">
+            Are you passionate about local commerce in Tier-2 Bharat? I am actively seeking advisors, technical collaborators, and ecosystem partners who want to help scale salon digitization and AI appointment booking.
+          </p>
+        </div>
+        <a href="mailto:iamaadi74@gmail.com?subject=Glowrova%20Collaboration" class="opp-action-btn">
+          <span>Collaborate on Glowrova</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     CLOSING CALL TO ACTION & DIRECT CONTACTS
+     ========================================================================== -->
+<section style="background: var(--paper); padding: 80px 24px 100px;" id="contact">
+  <div class="notes-container">
+    <div class="closing-block" style="margin-top: 0;">
       <h3 class="closing-tagline">
-        Follow the build, the wins and the bugs.
+        Let's build something meaningful.
       </h3>
+      <p style="font-family: 'Manrope', sans-serif; font-size: 15px; color: var(--ink-2); max-width: 600px; margin: 0 auto 28px;">
+        Open for internships, freelance design and social media opportunities, and startup collaborations. Reach out directly through any channel below.
+      </p>
+
       <div class="closing-cta-row">
         <a href="https://www.youtube.com/@NoFilterEngineer" target="_blank" rel="noopener noreferrer" class="btn-subscribe-cta">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
@@ -1724,7 +2657,7 @@ body {
         </a>
       </div>
 
-      <!-- Direct Contact & Social Channels Grid -->
+      <!-- Direct Contact & Social Channels Grid (Preserved all 6 verified channels) -->
       <div class="contact-grid">
         <!-- 1. Direct Email -->
         <a href="mailto:iamaadi74@gmail.com" class="contact-card">
@@ -1753,7 +2686,7 @@ body {
             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
           </div>
           <div class="contact-val">Aditya Kumar</div>
-          <div class="contact-hint">Professional network & updates ↗</div>
+          <div class="contact-hint">Professional network &amp; updates ↗</div>
         </a>
 
         <!-- 4. GitHub -->
@@ -1763,7 +2696,7 @@ body {
             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           </div>
           <div class="contact-val">github.com/aadi-010</div>
-          <div class="contact-hint">Code repos & open source ↗</div>
+          <div class="contact-hint">Code repos &amp; open source ↗</div>
         </a>
 
         <!-- 5. YouTube -->
@@ -1783,12 +2716,37 @@ body {
             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </div>
           <div class="contact-val">@nofilterengineer</div>
-          <div class="contact-hint">Stories & behind-the-scenes ↗</div>
+          <div class="contact-hint">Stories &amp; behind-the-scenes ↗</div>
         </a>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ==========================================================================
+     SITE FOOTER
+     ========================================================================== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">ADITYA KUMAR <span class="brand-sub">· NO FILTER ENGINEER</span></span>
+      <span class="footer-sub">First-Year CS Student · Founder &amp; Builder at Glowrova</span>
+    </div>
+
+    <div class="footer-links">
+      <a href="#glowrova">Glowrova</a>
+      <a href="#recognition">Award</a>
+      <a href="#other-work">Other Work</a>
+      <a href="#journey">Journey</a>
+      <a href="#opportunities">Opportunities</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="footer-copy">
+      © 2026 Aditya Kumar · All social, code, and project links verified.
+    </div>
+  </div>
+</footer>
 
 <!-- ==========================================================================
      INLINE SCRIPT: RUNTIME SAMPLING, CHOREOGRAPHY & INTERSECTION OBSERVERS
@@ -1797,13 +2755,6 @@ body {
 (function() {
   'use strict';
 
-  /* ==========================================================================
-     TUNABLES
-     - REVEAL_AT: Seconds into hero.mp4 when Aditya settles facing camera (7.4s).
-       If your clip settles at a different moment, change this constant.
-     - SAMPLE: [width_ratio, height_ratio] backdrop area left of head.
-     - GHOST_MULT: Default 0.955. Raise to ~0.98 if forehead skin ghosting appears.
-     ========================================================================== */
   const REVEAL_AT = 7.4;
   const SAMPLE = [0.30, 0.20];
   const GHOST_MULT = 0.955;
@@ -1815,12 +2766,7 @@ body {
   let isRevealed = false;
   let hasSampledColor = false;
 
-  /* --------------------------------------------------------------------------
-     1. MATCH PAGE TO FOOTAGE AT RUNTIME
-     Draw 1px patch from video at SAMPLE coordinates into 1x1 canvas.
-     Read pixel, write to --bg, and set --ghost to color * --ghost-mult.
-     Wrap in try/catch to fall back gracefully on file:// or cross-origin.
-     -------------------------------------------------------------------------- */
+  /* 1. MATCH PAGE TO FOOTAGE AT RUNTIME */
   function sampleFootageColor() {
     if (hasSampledColor || !video) return;
     try {
@@ -1837,7 +2783,6 @@ body {
       ctx.drawImage(video, sx, sy, 1, 1, 0, 0, 1, 1);
       const px = ctx.getImageData(0, 0, 1, 1).data;
 
-      // Ignore if completely pitch black / not rendered yet
       if (px[0] === 0 && px[1] === 0 && px[2] === 0) return;
 
       const r = px[0];
@@ -1860,10 +2805,7 @@ body {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     2. DRAW CARD THUMBNAIL CROPS FROM FINAL FRAME
-     Each canvas has data-crop="x,y,size" with size as fraction of video width.
-     -------------------------------------------------------------------------- */
+  /* 2. DRAW CARD THUMBNAIL CROPS */
   function renderCardThumbnails() {
     if (!video) return;
     const canvases = document.querySelectorAll('.card-thumb-canvas');
@@ -1879,7 +2821,7 @@ body {
         const sx = fx * vw;
         const sy = fy * vh;
         const sWidth = fsize * vw;
-        const sHeight = fsize * vw; // square aspect ratio crop
+        const sHeight = fsize * vw;
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
@@ -1892,11 +2834,7 @@ body {
     });
   }
 
-  /* --------------------------------------------------------------------------
-     3. HERO REVEAL CHOREOGRAPHY
-     Add .is-revealed once currentTime >= REVEAL_AT.
-     Never leave hero blank: reveal on ended, error, rejected play, or 9s timeout.
-     -------------------------------------------------------------------------- */
+  /* 3. HERO REVEAL CHOREOGRAPHY */
   function revealHeroUI() {
     if (isRevealed) return;
     isRevealed = true;
@@ -1905,18 +2843,19 @@ body {
     renderCardThumbnails();
   }
 
-  // Check prefers-reduced-motion: jump to last frame & reveal immediately with no delay
+  // Instant reveal if visitor scrolls down
+  window.addEventListener('scroll', () => {
+    revealHeroUI();
+  }, { once: true, passive: true });
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) {
-    if (video) {
-      video.currentTime = 7.9;
-    }
+    if (video) video.currentTime = 7.9;
     revealHeroUI();
   } else {
-    // Hard fallback timeout: 9s ensures hero UI is NEVER left blank
     const fallbackTimer = setTimeout(() => {
       revealHeroUI();
-    }, 9000);
+    }, 8500);
 
     if (video) {
       video.addEventListener('loadeddata', () => {
@@ -1939,11 +2878,9 @@ body {
         revealHeroUI();
       });
 
-      // Start playing video immediately if ready
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay blocked by browser policy: reveal gracefully
           revealHeroUI();
         });
       }
@@ -1959,16 +2896,12 @@ body {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     4. REPLAY BUTTON INTERACTION
-     Resets .is-revealed, hides thumbnails, and restarts video from 0s.
-     -------------------------------------------------------------------------- */
+  /* 4. REPLAY BUTTON */
   if (replayBtn && video) {
     replayBtn.addEventListener('click', () => {
       isRevealed = false;
       if (hero) hero.classList.remove('is-revealed');
 
-      // Hide canvas thumbnails until settled again
       document.querySelectorAll('.card-thumb-canvas').forEach(c => {
         c.classList.remove('is-drawn');
       });
@@ -1978,10 +2911,7 @@ body {
     });
   }
 
-  /* --------------------------------------------------------------------------
-     5. INTERSECTION OBSERVER FOR BELOW-THE-FOLD NOTES & STATS
-     Threshold: 0.18, fading up 28px with staggered reveals.
-     -------------------------------------------------------------------------- */
+  /* 5. INTERSECTION OBSERVER FOR ALL REVEAL SECTIONS */
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -1991,16 +2921,15 @@ body {
         }
       });
     }, {
-      threshold: 0.18,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
     });
 
-    document.querySelectorAll('.note-card, .stats-band, .closing-block').forEach(el => {
+    document.querySelectorAll('.note-card, .stats-band, .closing-block, .contribution-card, .recognition-box, .other-work-card, .opportunity-card').forEach(el => {
       observer.observe(el);
     });
   } else {
-    // Fallback if IntersectionObserver not supported
-    document.querySelectorAll('.note-card, .stats-band, .closing-block').forEach(el => {
+    document.querySelectorAll('.note-card, .stats-band, .closing-block, .contribution-card, .recognition-box, .other-work-card, .opportunity-card').forEach(el => {
       el.classList.add('is-visible');
     });
   }
