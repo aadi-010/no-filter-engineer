@@ -2922,7 +2922,19 @@ body {
     });
   }
 
-  /* 3. HERO REVEAL CHOREOGRAPHY */
+  /* 3. HERO REVEAL & POINTER GAZE TRACKING (NO AUTOPLAY)
+     - Video is kept paused and muted on page load.
+     - Settles on neutral resting frame (7.8s) with instant hero UI reveal.
+     - Maps pointer position around portrait center to available footage directions:
+       * Left (viewer left / person right): 0.2s - 1.45s
+       * Right (viewer right / person left): 2.2s - 2.85s
+       * Down: 3.6s - 4.2s
+       * Up: Source footage limitation (no upward gaze recorded); maps to level resting frame (7.8s)
+     - Non-blocking seeking with requestAnimationFrame to prevent stutter.
+     - Respects prefers-reduced-motion with static neutral fallback.
+     -------------------------------------------------------------------------- */
+  const RESTING_TIME = 7.8;
+
   function revealHeroUI() {
     if (isRevealed) return;
     isRevealed = true;
@@ -2931,71 +2943,151 @@ body {
     renderCardThumbnails();
   }
 
-  // Instant reveal if visitor scrolls down
-  window.addEventListener('scroll', () => {
-    revealHeroUI();
-  }, { once: true, passive: true });
+  // Ensure video is paused, muted, and parked on resting frame
+  if (video) {
+    video.pause();
+    video.muted = true;
+    video.loop = false;
+    video.removeAttribute('autoplay');
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReducedMotion) {
-    if (video) video.currentTime = 7.9;
-    revealHeroUI();
-  } else {
-    const fallbackTimer = setTimeout(() => {
+    const setInitialFrame = () => {
+      try {
+        video.currentTime = RESTING_TIME;
+      } catch(e) {}
       revealHeroUI();
-    }, 8500);
+    };
 
-    if (video) {
-      video.addEventListener('loadeddata', () => {
-        sampleFootageColor();
-      });
-
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= REVEAL_AT) {
-          revealHeroUI();
-        }
-      });
-
-      video.addEventListener('ended', () => {
-        clearTimeout(fallbackTimer);
-        revealHeroUI();
-      });
-
-      video.addEventListener('error', () => {
-        clearTimeout(fallbackTimer);
-        revealHeroUI();
-      });
-
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          revealHeroUI();
-        });
-      }
-
-      if (video.readyState >= 2) {
-        sampleFootageColor();
-        if (video.currentTime >= REVEAL_AT) {
-          revealHeroUI();
-        }
-      }
+    if (video.readyState >= 2) {
+      setInitialFrame();
     } else {
-      revealHeroUI();
+      video.addEventListener('loadedmetadata', setInitialFrame, { once: true });
+      video.addEventListener('loadeddata', setInitialFrame, { once: true });
     }
   }
 
-  /* 4. REPLAY BUTTON */
+  // Immediate hero reveal fallback
+  setTimeout(revealHeroUI, 300);
+
+  // Smooth Non-blocking Gaze Seeking Engine
+  let seekQueued = null;
+  let rafGazeId = null;
+
+  function applySeek(time) {
+    if (!video || isNaN(time)) return;
+    if (Math.abs(video.currentTime - time) < 0.04) return;
+    if (video.seeking) {
+      seekQueued = time;
+      return;
+    }
+    video.currentTime = time;
+  }
+
+  if (video) {
+    video.addEventListener('seeked', () => {
+      if (seekQueued !== null) {
+        const next = seekQueued;
+        seekQueued = null;
+        applySeek(next);
+      }
+    });
+  }
+
+  function getTargetTimeForPointer(clientX, clientY) {
+    const heroRect = hero ? hero.getBoundingClientRect() : null;
+    if (!heroRect) return RESTING_TIME;
+
+    // Center of portrait face (approx 50% horizontal, 38% vertical)
+    const centerX = heroRect.left + heroRect.width * 0.5;
+    const centerY = heroRect.top + heroRect.height * 0.38;
+
+    const dx = (clientX - centerX) / (heroRect.width * 0.5);
+    const dy = (clientY - centerY) / (heroRect.height * 0.5);
+    const dist = Math.hypot(dx, dy);
+
+    // Deadzone in the center: looking directly at camera
+    if (dist < 0.16) return RESTING_TIME;
+
+    // Angle: 0 = Right, 90 = Down, 180 = Left, -90 = Up
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+    // Downward quadrant (45 deg to 135 deg)
+    if (angle > 45 && angle < 135) {
+      const intensity = Math.min(1, Math.max(0, (dy - 0.16) / 0.65));
+      return 3.6 + intensity * 0.6; // 3.6s to 4.2s (eyes & head cast downward)
+    }
+    // Left quadrant (135 deg to -135 deg) -> viewer's left
+    else if (angle >= 135 || angle <= -135) {
+      const intensity = Math.min(1, Math.max(0, (-dx - 0.16) / 0.65));
+      return 0.2 + intensity * 1.25; // 0.2s to 1.45s (head turns toward viewer's left)
+    }
+    // Right quadrant (-45 deg to 45 deg) -> viewer's right
+    else if (angle >= -45 && angle <= 45) {
+      const intensity = Math.min(1, Math.max(0, (dx - 0.16) / 0.65));
+      return 2.2 + intensity * 0.65; // 2.2s to 2.85s (head turns toward viewer's right)
+    }
+    // Upward quadrant (-135 deg to -45 deg)
+    // Limitation: Source clip does not contain an upward gaze pose; maps cleanly to level resting frame
+    else {
+      return RESTING_TIME;
+    }
+  }
+
+  function queueGazeUpdate(clientX, clientY) {
+    if (rafGazeId) cancelAnimationFrame(rafGazeId);
+    rafGazeId = requestAnimationFrame(() => {
+      const t = getTargetTimeForPointer(clientX, clientY);
+      applySeek(t);
+    });
+  }
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion && video) {
+    // Desktop pointer movement
+    window.addEventListener('pointermove', (e) => {
+      // Only track when hero is in view
+      if (window.scrollY < window.innerHeight * 1.15) {
+        queueGazeUpdate(e.clientX, e.clientY);
+      }
+    }, { passive: true });
+
+    // Touch device drag support on hero
+    if (hero) {
+      hero.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) {
+          queueGazeUpdate(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      hero.addEventListener('touchend', () => {
+        applySeek(RESTING_TIME);
+      });
+    }
+
+    // Return to neutral resting frame when cursor leaves window
+    document.addEventListener('pointerleave', () => {
+      applySeek(RESTING_TIME);
+    });
+
+    window.addEventListener('blur', () => {
+      applySeek(RESTING_TIME);
+    });
+  }
+
+  /* 4. REPLAY BUTTON INTERACTION
+     For visitors who still wish to view the full 8s video playback sequence */
   if (replayBtn && video) {
     replayBtn.addEventListener('click', () => {
-      isRevealed = false;
-      if (hero) hero.classList.remove('is-revealed');
-
-      document.querySelectorAll('.card-thumb-canvas').forEach(c => {
-        c.classList.remove('is-drawn');
-      });
-
       video.currentTime = 0;
-      video.play().catch(err => console.warn('Replay play error:', err));
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => console.warn('Replay play error:', err));
+      }
+    });
+
+    video.addEventListener('ended', () => {
+      video.pause();
+      applySeek(RESTING_TIME);
     });
   }
 
